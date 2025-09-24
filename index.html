@@ -540,13 +540,14 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama Guru</th>
+                                                <th>NIP</th>
                                                 <th>Username</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody id="tabel-guru">
                                             <tr>
-                                                <td colspan="4" class="text-center">Belum ada data guru</td>
+                                                <td colspan="5" class="text-center">Belum ada data guru</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -860,6 +861,10 @@
                             <input type="text" class="form-control" id="nama-guru-baru" required>
                         </div>
                         <div class="mb-3">
+                            <label for="nip-guru-baru" class="form-label">NIP</label>
+                            <input type="text" class="form-control" id="nip-guru-baru" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="username-guru-baru" class="form-label">Username</label>
                             <input type="text" class="form-control" id="username-guru-baru" required>
                         </div>
@@ -1082,6 +1087,7 @@
                 sessionStorage.setItem('loggedInUser', JSON.stringify({
                     id: guru.id,
                     nama: guru.nama,
+                    nip: guru.nip,
                     username: guru.username,
                     role: 'guru'
                 }));
@@ -1264,10 +1270,11 @@
         
         function saveGuru() {
             const namaGuru = document.getElementById('nama-guru-baru').value;
+            const nipGuru = document.getElementById('nip-guru-baru').value;
             const usernameGuru = document.getElementById('username-guru-baru').value;
             const passwordGuru = document.getElementById('password-guru-baru').value;
             
-            if (namaGuru && usernameGuru && passwordGuru) {
+            if (namaGuru && nipGuru && usernameGuru && passwordGuru) {
                 // Check if username already exists
                 if (dataGuru.some(g => g.username === usernameGuru)) {
                     alert('Username sudah digunakan!');
@@ -1277,6 +1284,7 @@
                 const newGuru = {
                     id: Date.now(),
                     nama: namaGuru,
+                    nip: nipGuru,
                     username: usernameGuru,
                     password: passwordGuru
                 };
@@ -1300,7 +1308,7 @@
             const tabelBody = document.getElementById('tabel-guru');
             
             if (dataGuru.length === 0) {
-                tabelBody.innerHTML = '<tr><td colspan="4" class="text-center">Belum ada data guru</td></tr>';
+                tabelBody.innerHTML = '<tr><td colspan="5" class="text-center">Belum ada data guru</td></tr>';
                 return;
             }
             
@@ -1310,6 +1318,7 @@
                     <tr>
                         <td>${index + 1}</td>
                         <td>${guru.nama}</td>
+                        <td>${guru.nip}</td>
                         <td>${guru.username}</td>
                         <td>
                             <button class="btn btn-sm btn-danger" onclick="deleteGuru(${guru.id})">
@@ -1958,7 +1967,7 @@
                             <p class="jabatan">Guru Wali</p>
                             <div class="signature-line"></div>
                             <p class="nama">${currentGuru.nama}</p>
-                            <p class="nip">NIP.</p>
+                            <p class="nip">NIP. ${currentGuru.nip || ''}</p>
                         </div>
                     </div>
                 `;
