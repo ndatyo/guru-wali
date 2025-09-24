@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Guru Wali</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar .nav-link {
+            color: #adb5bd;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #495057;
+            color: white;
+        }
+        .sidebar .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .content {
+            padding: 20px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            border-color: #0a58ca;
+        }
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table thead {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        .hidden {
+            display: none;
+        }
+        .journal-entry {
+            border-left: 4px solid #0d6efd;
+            padding-left: 15px;
+            margin-bottom: 20px;
+        }
+        .journal-date {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        .journal-category {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        .category-1 {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        .category-2 {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .category-3 {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .journal-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        .journal-info-item {
+            display: flex;
+            align-items: center;
+        }
+        .journal-info-item i {
+            margin-right: 5px;
+            color: #0d6efd;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        .status-1 {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        .status-2 {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-3 {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .analysis-card {
+            border-left: 4px solid #198754;
+            padding-left: 15px;
+            margin-bottom: 20px;
+        }
+        .analysis-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .analysis-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #198754;
+        }
+        .analysis-date {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        .user-info {
+            background-color: #e9ecef;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .user-info h5 {
+            margin: 0;
+            color: #495057;
+        }
+        .user-info small {
+            color: #6c757d;
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                margin: 0;
+            }
+            .sidebar, .footer, .btn, .no-print {
+                display: none !important;
+            }
+            .col-md-9 {
+                width: 100%;
+                max-width: 100%;
+                flex: 0 0 100%;
+                padding: 15px;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+            }
+            .card-header {
+                background-color: #0d6efd !important;
+                color: white !important;
+            }
+            .journal-entry {
+                border-left: 4px solid #0d6efd;
+                padding-left: 15px;
+                margin-bottom: 20px;
+                page-break-inside: avoid;
+            }
+            .print-header {
+                text-align: center;
+                margin-bottom: 30px;
+                border-bottom: 2px solid #0d6efd;
+                padding-bottom: 10px;
+            }
+            .print-header h2 {
+                margin-bottom: 5px;
+                color: #0d6efd;
+            }
+            .print-info {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+                font-size: 14px;
+            }
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+            .print-table th, .print-table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+            .print-table th {
+                background-color: #f2f2f2;
+            }
+            .print-footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                text-align: center;
+                font-size: 12px;
+                color: #777;
+                border-top: 1px solid #ddd;
+                padding-top: 10px;
+            }
+            @page {
+                margin: 1cm;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Halaman Login -->
+    <div id="login-page" class="page">
+        <div class="login-container">
+            <div class="text-center mb-4">
+                <h2><i class="bi bi-person-workspace"></i> Aplikasi Guru Wali</h2>
+                <p class="text-muted">Silakan login untuk melanjutkan</p>
+            </div>
+            
+            <ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-guru-tab" data-bs-toggle="pill" data-bs-target="#pills-guru" type="button" role="tab" aria-controls="pills-guru" aria-selected="true">Login Guru</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-admin-tab" data-bs-toggle="pill" data-bs-target="#pills-admin" type="button" role="tab" aria-controls="pills-admin" aria-selected="false">Login Admin</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content" id="pills-tabContent">
+                <!-- Form Login Guru -->
+                <div class="tab-pane fade show active" id="pills-guru" role="tabpanel" aria-labelledby="pills-guru-tab">
+                    <form id="login-guru-form">
+                        <div class="mb-3">
+                            <label for="username-guru" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username-guru" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password-guru" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password-guru" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                </div>
+                
+                <!-- Form Login Admin -->
+                <div class="tab-pane fade" id="pills-admin" role="tabpanel" aria-labelledby="pills-admin-tab">
+                    <form id="login-admin-form">
+                        <div class="mb-3">
+                            <label for="username-admin" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username-admin" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password-admin" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password-admin" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="text-center mt-3">
+                <small class="text-muted">Admin default: username: admin, password: admin123</small>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Halaman Admin -->
+    <div id="admin-page" class="page hidden">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar Admin -->
+                <div class="col-md-3 sidebar">
+                    <div class="text-center mb-4">
+                        <h4><i class="bi bi-shield-lock"></i> Admin Panel</h4>
+                    </div>
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#" onclick="showAdminPage('dashboard')">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                        <a class="nav-link" href="#" onclick="showAdminPage('kelola-guru')">
+                            <i class="bi bi-person-plus"></i> Kelola Guru
+                        </a>
+                        <a class="nav-link" href="#" onclick="logout()">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </nav>
+                </div>
+                
+                <!-- Main Content Admin -->
+                <div class="col-md-9 content">
+                    <!-- Dashboard Admin -->
+                    <div id="admin-dashboard-page" class="admin-page">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2>Dashboard Admin</h2>
+                            <div class="user-info">
+                                <h5><i class="bi bi-person-circle"></i> Admin</h5>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="bi bi-people"></i> Total Guru</h5>
+                                        <p class="card-text fs-2" id="total-guru">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="bi bi-person-lines-fill"></i> Total Siswa</h5>
+                                        <p class="card-text fs-2" id="total-siswa">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="bi bi-journal-text"></i> Total Jurnal</h5>
+                                        <p class="card-text fs-2" id="total-jurnal">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Halaman Kelola Guru -->
+                    <div id="admin-kelola-guru-page" class="admin-page hidden">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2>Kelola Guru</h2>
+                            <div class="user-info">
+                                <h5><i class="bi bi-person-circle"></i> Admin</h5>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5>Data Guru</h5>
+                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#tambahGuruModal">
+                                    <i class="bi bi-plus-circle"></i> Tambah Guru
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Guru</th>
+                                                <th>Username</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabel-guru">
+                                            <tr>
+                                                <td colspan="4" class="text-center">Belum ada data guru</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Halaman Guru Wali -->
+    <div id="guru-page" class="page hidden">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar Guru -->
+                <div class="col-md-3 sidebar">
+                    <div class="text-center mb-4">
+                        <h4><i class="bi bi-person-workspace"></i> Guru Wali</h4>
+                    </div>
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#" onclick="showGuruPage('home')">
+                            <i class="bi bi-house-door"></i> Beranda
+                        </a>
+                        <a class="nav-link" href="#" onclick="showGuruPage('manajemen-kelas')">
+                            <i class="bi bi-people"></i> Manajemen Kelas
+                        </a>
+                        <a class="nav-link" href="#" onclick="showGuruPage('jurnal')">
+                            <i class="bi bi-journal-text"></i> Jurnal Kegiatan
+                        </a>
+                        <a class="nav-link" href="#" onclick="showGuruPage('analisis')">
+                            <i class="bi bi-graph-up"></i> Analisis Tindak Lanjut Jurnal
+                        </a>
+                        <a class="nav-link" href="#" onclick="logout()">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </nav>
+                </div>
+                
+                <!-- Main Content Guru -->
+                <div class="col-md-9 content">
+                    <!-- Info Guru -->
+                    <div class="user-info">
+                        <h5><i class="bi bi-person-circle"></i> <span id="nama-guru-login"></span></h5>
+                        <small>Username: <span id="username-guru-login"></span></small>
+                    </div>
+                    
+                    <!-- Halaman Beranda Guru -->
+                    <div id="guru-home-page" class="guru-page">
+                        <h2 class="mb-4">Selamat Datang di Aplikasi Guru Wali</h2>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="bi bi-people"></i> Manajemen Kelas</h5>
+                                        <p class="card-text">Kelola data siswa dalam kelas Anda.</p>
+                                        <a href="#" class="btn btn-primary" onclick="showGuruPage('manajemen-kelas')">Buka Manajemen Kelas</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="bi bi-journal-text"></i> Jurnal Kegiatan</h5>
+                                        <p class="card-text">Catat kegiatan harian sebagai guru wali dan refleksikan hasilnya.</p>
+                                        <a href="#" class="btn btn-primary" onclick="showGuruPage('jurnal')">Buka Jurnal Kegiatan</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="bi bi-graph-up"></i> Analisis Tindak Lanjut</h5>
+                                        <p class="card-text">Analisis evaluasi dan refleksi bimbingan siswa.</p>
+                                        <a href="#" class="btn btn-primary" onclick="showGuruPage('analisis')">Buka Analisis</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h5>Tugas Guru Wali</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="accordion" id="tugasAccordion">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingOne">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                1. Pendampingan Akademik
+                                            </button>
+                                        </h2>
+                                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#tugasAccordion">
+                                            <div class="accordion-body">
+                                                <ul>
+                                                    <li>Memantau perkembangan akademik siswa</li>
+                                                    <li>Mengatasi kesulitan belajar siswa</li>
+                                                    <li>Koordinasi dengan guru mata pelajaran</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingTwo">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                2. Pengembangan Kompetensi dan Keterampilan
+                                            </button>
+                                        </h2>
+                                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#tugasAccordion">
+                                            <div class="accordion-body">
+                                                <ul>
+                                                    <li>Mendorong potensi siswa</li>
+                                                    <li>Memberi motivasi</li>
+                                                    <li>Meningkatkan kompetensi kritis</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingThree">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                3. Pembentukan Karakter
+                                            </button>
+                                        </h2>
+                                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#tugasAccordion">
+                                            <div class="accordion-body">
+                                                <ul>
+                                                    <li>Menanamkan nilai-nilai positif</li>
+                                                    <li>Memberikan teladan</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Halaman Manajemen Kelas Guru -->
+                    <div id="guru-manajemen-kelas-page" class="guru-page hidden">
+                        <h2 class="mb-4">Manajemen Kelas</h2>
+                        
+                        <!-- Data Siswa -->
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5>Data Siswa</h5>
+                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#tambahSiswaModal">
+                                    <i class="bi bi-plus-circle"></i> Tambah Siswa
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Siswa</th>
+                                                <th>Kelas</th>
+                                                <th>NIS</th>
+                                                <th>NISN</th>
+                                                <th>Jenis Kelamin</th>
+                                                <th>Agama</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabel-siswa">
+                                            <tr>
+                                                <td colspan="8" class="text-center">Belum ada data siswa</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Halaman Jurnal Guru -->
+                    <div id="guru-jurnal-page" class="guru-page hidden">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2>Jurnal Kegiatan Guru Wali</h2>
+                            <div>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahJurnalModal">
+                                    <i class="bi bi-plus-circle"></i> Tambah Catatan
+                                </button>
+                                <button class="btn btn-success ms-2" data-bs-toggle="modal" data-bs-target="#cetakJurnalModal">
+                                    <i class="bi bi-printer"></i> Cetak Jurnal
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Catatan Jurnal</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="daftar-jurnal">
+                                    <div class="alert alert-info">
+                                        Belum ada catatan jurnal. Silakan tambahkan catatan baru.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Halaman Analisis Tindak Lanjut Guru -->
+                    <div id="guru-analisis-page" class="guru-page hidden">
+                        <h2 class="mb-4">Analisis Tindak Lanjut Jurnal</h2>
+                        
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5>Ringkasan Analisis</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="ringkasan-analisis">
+                                    <div class="alert alert-info">
+                                        Belum ada data analisis. Silakan tambahkan catatan jurnal terlebih dahulu.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Detail Analisis Tindak Lanjut</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="daftar-analisis">
+                                    <div class="alert alert-info">
+                                        Belum ada data analisis. Silakan tambahkan catatan jurnal terlebih dahulu.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Halaman Cetak Jurnal -->
+                    <div id="cetak-jurnal-page" class="guru-page hidden">
+                        <div class="print-header">
+                            <h2>JURNAL KEGIATAN GURU WALI</h2>
+                            <p>SMA NEGERI 20 MEDAN</p>
+                        </div>
+                        
+                        <div class="print-info">
+                            <div>
+                                <strong>Guru Wali:</strong> <span id="print-guru"></span>
+                            </div>
+                            <div>
+                                <strong>Periode:</strong> <span id="print-periode"></span>
+                            </div>
+                            <div>
+                                <strong>Tanggal Cetak:</strong> <span id="print-tanggal"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Daftar Catatan Jurnal</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="cetak-daftar-jurnal">
+                                    <div class="alert alert-info">
+                                        Tidak ada data jurnal untuk periode yang dipilih.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="print-footer mt-5">
+                            <p>© 2025 Aplikasi Guru Wali - SMA NEGERI 20 MEDAN</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2025 Aplikasi Guru Wali. Dikembangkan untuk mendukung tugas guru wali dalam pendidikan.</p>
+    </div>
+    
+    <!-- Modal Tambah Guru -->
+    <div class="modal fade" id="tambahGuruModal" tabindex="-1" aria-labelledby="tambahGuruModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tambahGuruModalLabel">Tambah Data Guru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="guru-form">
+                        <div class="mb-3">
+                            <label for="nama-guru-baru" class="form-label">Nama Guru</label>
+                            <input type="text" class="form-control" id="nama-guru-baru" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="username-guru-baru" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username-guru-baru" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password-guru-baru" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password-guru-baru" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="saveGuru()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Tambah Siswa -->
+    <div class="modal fade" id="tambahSiswaModal" tabindex="-1" aria-labelledby="tambahSiswaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tambahSiswaModalLabel">Tambah Data Siswa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="siswa-form">
+                        <div class="mb-3">
+                            <label for="nama-siswa" class="form-label">Nama Siswa</label>
+                            <input type="text" class="form-control" id="nama-siswa" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="kelas-siswa" class="form-label">Kelas</label>
+                            <input type="text" class="form-control" id="kelas-siswa" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nis-siswa" class="form-label">NIS</label>
+                            <input type="text" class="form-control" id="nis-siswa" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nisn-siswa" class="form-label">NISN</label>
+                            <input type="text" class="form-control" id="nisn-siswa" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jk-siswa" class="form-label">Jenis Kelamin</label>
+                            <select class="form-select" id="jk-siswa" required>
+                                <option value="">Pilih jenis kelamin</option>
+                                <option value="Laki-laki">Laki-laki</option>
+                                <option value="Perempuan">Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="agama-siswa" class="form-label">Agama</label>
+                            <select class="form-select" id="agama-siswa" required>
+                                <option value="">Pilih agama</option>
+                                <option value="Islam">Islam</option>
+                                <option value="Kristen">Kristen</option>
+                                <option value="Katolik">Katolik</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Buddha">Buddha</option>
+                                <option value="Konghucu">Konghucu</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSiswa()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Tambah/Edit Jurnal -->
+    <div class="modal fade" id="tambahJurnalModal" tabindex="-1" aria-labelledby="tambahJurnalModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tambahJurnalModalLabel">Tambah Catatan Jurnal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="jurnal-form">
+                        <input type="hidden" id="jurnal-id">
+                        <div class="mb-3">
+                            <label for="siswa-jurnal" class="form-label">Siswa</label>
+                            <select class="form-select" id="siswa-jurnal" required>
+                                <option value="">Pilih siswa</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tanggal-jurnal" class="form-label">Tanggal Kegiatan</label>
+                            <input type="date" class="form-control" id="tanggal-jurnal" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="kategori-jurnal" class="form-label">Kategori Tugas</label>
+                            <select class="form-select" id="kategori-jurnal" required>
+                                <option value="">Pilih kategori</option>
+                                <option value="1">Pendampingan Akademik</option>
+                                <option value="2">Pengembangan Kompetensi dan Keterampilan</option>
+                                <option value="3">Pembentukan Karakter</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="kegiatan-jurnal" class="form-label">Kegiatan yang Dilakukan</label>
+                            <textarea class="form-control" id="kegiatan-jurnal" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="evaluasi-tindak-lanjut-jurnal" class="form-label">Evaluasi dan Tindak Lanjut</label>
+                            <textarea class="form-control" id="evaluasi-tindak-lanjut-jurnal" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status-jurnal" class="form-label">Status Bimbingan</label>
+                            <select class="form-select" id="status-jurnal" required>
+                                <option value="">Pilih status bimbingan</option>
+                                <option value="1">Baik - Kondisi Positif</option>
+                                <option value="2">Perlu Perhatian - Butuh Monitoring</option>
+                                <option value="3">Butuh Bantuan - Perlu Intervensi</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="refleksi-jurnal" class="form-label">Refleksi</label>
+                            <textarea class="form-control" id="refleksi-jurnal" rows="3" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="saveJurnal()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Cetak Jurnal -->
+    <div class="modal fade" id="cetakJurnalModal" tabindex="-1" aria-labelledby="cetakJurnalModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cetakJurnalModalLabel">Cetak Jurnal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="cetak-form">
+                        <div class="mb-3">
+                            <label for="bulan-cetak" class="form-label">Bulan</label>
+                            <select class="form-select" id="bulan-cetak" required>
+                                <option value="">Pilih bulan</option>
+                                <option value="01">Januari</option>
+                                <option value="02">Februari</option>
+                                <option value="03">Maret</option>
+                                <option value="04">April</option>
+                                <option value="05">Mei</option>
+                                <option value="06">Juni</option>
+                                <option value="07">Juli</option>
+                                <option value="08">Agustus</option>
+                                <option value="09">September</option>
+                                <option value="10">Oktober</option>
+                                <option value="11">November</option>
+                                <option value="12">Desember</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tahun-cetak" class="form-label">Tahun</label>
+                            <select class="form-select" id="tahun-cetak" required>
+                                <!-- Options will be populated by JavaScript -->
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="prepareCetak()">Preview & Cetak</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Data storage
+        let dataGuru = JSON.parse(localStorage.getItem('dataGuru')) || [];
+        let dataSiswa = JSON.parse(localStorage.getItem('dataSiswa')) || [];
+        let dataJurnal = JSON.parse(localStorage.getItem('dataJurnal')) || [];
+        let currentGuru = null;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set today's date as default
+            document.getElementById('tanggal-jurnal').valueAsDate = new Date();
+            
+            // Populate year options
+            const currentYear = new Date().getFullYear();
+            const yearSelect = document.getElementById('tahun-cetak');
+            for (let year = currentYear - 2; year <= currentYear + 2; year++) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                if (year === currentYear) {
+                    option.selected = true;
+                }
+                yearSelect.appendChild(option);
+            }
+            
+            // Set current month as default
+            const currentMonth = new Date().getMonth() + 1;
+            const monthSelect = document.getElementById('bulan-cetak');
+            if (currentMonth < 10) {
+                monthSelect.value = '0' + currentMonth;
+            } else {
+                monthSelect.value = currentMonth.toString();
+            }
+            
+            // Check if user is already logged in
+            const loggedInUser = sessionStorage.getItem('loggedInUser');
+            if (loggedInUser) {
+                const userData = JSON.parse(loggedInUser);
+                if (userData.role === 'admin') {
+                    showAdminDashboard();
+                } else {
+                    currentGuru = userData;
+                    showGuruDashboard();
+                }
+            }
+        });
+        
+        // Login functions
+        document.getElementById('login-guru-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username-guru').value;
+            const password = document.getElementById('password-guru').value;
+            
+            // Find teacher in data
+            const guru = dataGuru.find(g => g.username === username && g.password === password);
+            
+            if (guru) {
+                currentGuru = guru;
+                sessionStorage.setItem('loggedInUser', JSON.stringify({
+                    id: guru.id,
+                    nama: guru.nama,
+                    username: guru.username,
+                    role: 'guru'
+                }));
+                showGuruDashboard();
+            } else {
+                alert('Username atau password salah!');
+            }
+        });
+        
+        document.getElementById('login-admin-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username-admin').value;
+            const password = document.getElementById('password-admin').value;
+            
+            // Check admin credentials (default: admin/admin123)
+            if (username === 'admin' && password === 'admin123') {
+                sessionStorage.setItem('loggedInUser', JSON.stringify({
+                    username: username,
+                    role: 'admin'
+                }));
+                showAdminDashboard();
+            } else {
+                alert('Username atau password salah!');
+            }
+        });
+        
+        // Logout function
+        function logout() {
+            sessionStorage.removeItem('loggedInUser');
+            currentGuru = null;
+            showLoginPage();
+        }
+        
+        // Page navigation functions
+        function showLoginPage() {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show login page
+            document.getElementById('login-page').classList.remove('hidden');
+        }
+        
+        function showAdminDashboard() {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show admin page
+            document.getElementById('admin-page').classList.remove('hidden');
+            
+            // Show dashboard subpage
+            showAdminPage('dashboard');
+            
+            // Update dashboard stats
+            updateAdminDashboardStats();
+        }
+        
+        function showGuruDashboard() {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show guru page
+            document.getElementById('guru-page').classList.remove('hidden');
+            
+            // Update guru info
+            document.getElementById('nama-guru-login').textContent = currentGuru.nama;
+            document.getElementById('username-guru-login').textContent = currentGuru.username;
+            
+            // Show home subpage
+            showGuruPage('home');
+            
+            // Load guru's data
+            loadGuruData();
+        }
+        
+        function showAdminPage(pageId) {
+            // Hide all admin subpages
+            const adminPages = document.querySelectorAll('.admin-page');
+            adminPages.forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show selected admin subpage
+            document.getElementById(`admin-${pageId}-page`).classList.remove('hidden');
+            
+            // Update active nav link
+            const navLinks = document.querySelectorAll('#admin-page .nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Find the link that matches the page and set it as active
+            navLinks.forEach(link => {
+                if (link.getAttribute('onclick').includes(pageId)) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Load data for specific pages
+            if (pageId === 'kelola-guru') {
+                renderTabelGuru();
+            }
+        }
+        
+        function showGuruPage(pageId) {
+            // Hide all guru subpages
+            const guruPages = document.querySelectorAll('.guru-page');
+            guruPages.forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show selected guru subpage
+            document.getElementById(`guru-${pageId}-page`).classList.remove('hidden');
+            
+            // Update active nav link
+            const navLinks = document.querySelectorAll('#guru-page .nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Find the link that matches the page and set it as active
+            navLinks.forEach(link => {
+                if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(pageId)) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Load data for specific pages
+            if (pageId === 'manajemen-kelas') {
+                renderTabelSiswa();
+            } else if (pageId === 'jurnal') {
+                renderJurnal();
+                updateSiswaOptions();
+            } else if (pageId === 'analisis') {
+                renderAnalisis();
+            }
+        }
+        
+        // Admin functions
+        function updateAdminDashboardStats() {
+            // Calculate stats
+            const totalGuru = dataGuru.length;
+            let totalSiswa = 0;
+            let totalJurnal = 0;
+            
+            // Count students and journals from all teachers
+            dataGuru.forEach(guru => {
+                const guruSiswa = dataSiswa.filter(s => s.guruId === guru.id);
+                const guruJurnal = dataJurnal.filter(j => j.guruId === guru.id);
+                
+                totalSiswa += guruSiswa.length;
+                totalJurnal += guruJurnal.length;
+            });
+            
+            // Update UI
+            document.getElementById('total-guru').textContent = totalGuru;
+            document.getElementById('total-siswa').textContent = totalSiswa;
+            document.getElementById('total-jurnal').textContent = totalJurnal;
+        }
+        
+        function saveGuru() {
+            const namaGuru = document.getElementById('nama-guru-baru').value;
+            const usernameGuru = document.getElementById('username-guru-baru').value;
+            const passwordGuru = document.getElementById('password-guru-baru').value;
+            
+            if (namaGuru && usernameGuru && passwordGuru) {
+                // Check if username already exists
+                if (dataGuru.some(g => g.username === usernameGuru)) {
+                    alert('Username sudah digunakan!');
+                    return;
+                }
+                
+                const newGuru = {
+                    id: Date.now(),
+                    nama: namaGuru,
+                    username: usernameGuru,
+                    password: passwordGuru
+                };
+                
+                dataGuru.push(newGuru);
+                localStorage.setItem('dataGuru', JSON.stringify(dataGuru));
+                
+                renderTabelGuru();
+                updateAdminDashboardStats();
+                
+                // Reset form and close modal
+                document.getElementById('guru-form').reset();
+                const modal = bootstrap.Modal.getInstance(document.getElementById('tambahGuruModal'));
+                modal.hide();
+                
+                alert('Data guru berhasil ditambahkan!');
+            }
+        }
+        
+        function renderTabelGuru() {
+            const tabelBody = document.getElementById('tabel-guru');
+            
+            if (dataGuru.length === 0) {
+                tabelBody.innerHTML = '<tr><td colspan="4" class="text-center">Belum ada data guru</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            dataGuru.forEach((guru, index) => {
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${guru.nama}</td>
+                        <td>${guru.username}</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" onclick="deleteGuru(${guru.id})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tabelBody.innerHTML = html;
+        }
+        
+        function deleteGuru(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data guru ini? Semua data terkait guru ini juga akan dihapus.')) {
+                // Delete teacher
+                dataGuru = dataGuru.filter(guru => guru.id !== id);
+                
+                // Delete related students and journals
+                dataSiswa = dataSiswa.filter(siswa => siswa.guruId !== id);
+                dataJurnal = dataJurnal.filter(jurnal => jurnal.guruId !== id);
+                
+                localStorage.setItem('dataGuru', JSON.stringify(dataGuru));
+                localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
+                localStorage.setItem('dataJurnal', JSON.stringify(dataJurnal));
+                
+                renderTabelGuru();
+                updateAdminDashboardStats();
+                alert('Data guru berhasil dihapus!');
+            }
+        }
+        
+        // Guru functions
+        function loadGuruData() {
+            // Load teacher's students and journals
+            renderTabelSiswa();
+            renderJurnal();
+            renderAnalisis();
+            updateSiswaOptions();
+        }
+        
+        function saveSiswa() {
+            const namaSiswa = document.getElementById('nama-siswa').value;
+            const kelasSiswa = document.getElementById('kelas-siswa').value;
+            const nisSiswa = document.getElementById('nis-siswa').value;
+            const nisnSiswa = document.getElementById('nisn-siswa').value;
+            const jkSiswa = document.getElementById('jk-siswa').value;
+            const agamaSiswa = document.getElementById('agama-siswa').value;
+            
+            if (namaSiswa && kelasSiswa && nisSiswa && nisnSiswa && jkSiswa && agamaSiswa) {
+                const newSiswa = {
+                    id: Date.now(),
+                    guruId: currentGuru.id,
+                    nama: namaSiswa,
+                    kelas: kelasSiswa,
+                    nis: nisSiswa,
+                    nisn: nisnSiswa,
+                    jk: jkSiswa,
+                    agama: agamaSiswa
+                };
+                
+                dataSiswa.push(newSiswa);
+                localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
+                
+                renderTabelSiswa();
+                updateSiswaOptions();
+                
+                // Reset form and close modal
+                document.getElementById('siswa-form').reset();
+                const modal = bootstrap.Modal.getInstance(document.getElementById('tambahSiswaModal'));
+                modal.hide();
+                
+                alert('Data siswa berhasil ditambahkan!');
+            }
+        }
+        
+        function updateSiswaOptions() {
+            const siswaSelect = document.getElementById('siswa-jurnal');
+            siswaSelect.innerHTML = '<option value="">Pilih siswa</option>';
+            
+            // Get teacher's students only
+            const guruSiswa = dataSiswa.filter(siswa => siswa.guruId === currentGuru.id);
+            
+            guruSiswa.forEach(siswa => {
+                const option = document.createElement('option');
+                option.value = siswa.id;
+                option.textContent = `${siswa.nama} (${siswa.kelas})`;
+                siswaSelect.appendChild(option);
+            });
+        }
+        
+        function renderTabelSiswa() {
+            const tabelBody = document.getElementById('tabel-siswa');
+            
+            // Get teacher's students only
+            const guruSiswa = dataSiswa.filter(siswa => siswa.guruId === currentGuru.id);
+            
+            if (guruSiswa.length === 0) {
+                tabelBody.innerHTML = '<tr><td colspan="8" class="text-center">Belum ada data siswa</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            guruSiswa.forEach((siswa, index) => {
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${siswa.nama}</td>
+                        <td>${siswa.kelas}</td>
+                        <td>${siswa.nis}</td>
+                        <td>${siswa.nisn}</td>
+                        <td>${siswa.jk}</td>
+                        <td>${siswa.agama}</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" onclick="deleteSiswa(${siswa.id})">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tabelBody.innerHTML = html;
+        }
+        
+        function deleteSiswa(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data siswa ini?')) {
+                dataSiswa = dataSiswa.filter(siswa => siswa.id !== id);
+                localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
+                renderTabelSiswa();
+                updateSiswaOptions();
+                alert('Data siswa berhasil dihapus!');
+            }
+        }
+        
+        function openEditJurnalModal(id) {
+            // Find journal data
+            const jurnal = dataJurnal.find(j => j.id === id);
+            if (!jurnal) return;
+            
+            // Fill form with journal data
+            document.getElementById('jurnal-id').value = jurnal.id;
+            document.getElementById('siswa-jurnal').value = jurnal.siswa.id;
+            document.getElementById('tanggal-jurnal').value = jurnal.tanggal;
+            document.getElementById('kategori-jurnal').value = jurnal.kategori;
+            document.getElementById('kegiatan-jurnal').value = jurnal.kegiatan;
+            document.getElementById('evaluasi-tindak-lanjut-jurnal').value = jurnal.evaluasiTindakLanjut;
+            document.getElementById('status-jurnal').value = jurnal.status;
+            document.getElementById('refleksi-jurnal').value = jurnal.refleksi;
+            
+            // Update modal title
+            document.getElementById('tambahJurnalModalLabel').textContent = 'Edit Catatan Jurnal';
+            
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('tambahJurnalModal'));
+            modal.show();
+        }
+        
+        function saveJurnal() {
+            const jurnalId = document.getElementById('jurnal-id').value;
+            const siswaId = document.getElementById('siswa-jurnal').value;
+            const tanggal = document.getElementById('tanggal-jurnal').value;
+            const kategori = document.getElementById('kategori-jurnal').value;
+            const kegiatan = document.getElementById('kegiatan-jurnal').value;
+            const evaluasiTindakLanjut = document.getElementById('evaluasi-tindak-lanjut-jurnal').value;
+            const status = document.getElementById('status-jurnal').value;
+            const refleksi = document.getElementById('refleksi-jurnal').value;
+            
+            if (siswaId && tanggal && kategori && kegiatan && evaluasiTindakLanjut && status && refleksi) {
+                // Find selected student
+                const selectedSiswa = dataSiswa.find(siswa => siswa.id == siswaId);
+                
+                const jurnalData = {
+                    guruId: currentGuru.id,
+                    guru: currentGuru.nama,
+                    siswa: {
+                        id: selectedSiswa.id,
+                        nama: selectedSiswa.nama,
+                        kelas: selectedSiswa.kelas
+                    },
+                    tanggal: tanggal,
+                    kategori: kategori,
+                    kegiatan: kegiatan,
+                    evaluasiTindakLanjut: evaluasiTindakLanjut,
+                    status: status,
+                    refleksi: refleksi
+                };
+                
+                if (jurnalId) {
+                    // Edit existing journal
+                    const index = dataJurnal.findIndex(j => j.id == jurnalId);
+                    if (index !== -1) {
+                        dataJurnal[index] = { ...dataJurnal[index], ...jurnalData };
+                        alert('Catatan jurnal berhasil diperbarui!');
+                    }
+                } else {
+                    // Add new journal
+                    const newJurnal = {
+                        id: Date.now(),
+                        ...jurnalData
+                    };
+                    dataJurnal.push(newJurnal);
+                    alert('Catatan jurnal berhasil ditambahkan!');
+                }
+                
+                localStorage.setItem('dataJurnal', JSON.stringify(dataJurnal));
+                
+                renderJurnal();
+                
+                // Reset form and close modal
+                document.getElementById('jurnal-form').reset();
+                document.getElementById('tanggal-jurnal').valueAsDate = new Date();
+                const modal = bootstrap.Modal.getInstance(document.getElementById('tambahJurnalModal'));
+                modal.hide();
+            }
+        }
+        
+        function renderJurnal() {
+            const jurnalContainer = document.getElementById('daftar-jurnal');
+            
+            // Get teacher's journals only
+            const guruJurnal = dataJurnal.filter(jurnal => jurnal.guruId === currentGuru.id);
+            
+            if (guruJurnal.length === 0) {
+                jurnalContainer.innerHTML = '<div class="alert alert-info">Belum ada catatan jurnal. Silakan tambahkan catatan baru.</div>';
+                return;
+            }
+            
+            // Sort journals by date (newest first)
+            const sortedJurnal = [...guruJurnal].sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+            
+            let html = '';
+            sortedJurnal.forEach(jurnal => {
+                const kategoriText = {
+                    '1': 'Pendampingan Akademik',
+                    '2': 'Pengembangan Kompetensi dan Keterampilan',
+                    '3': 'Pembentukan Karakter'
+                };
+                
+                const statusText = {
+                    '1': 'Baik - Kondisi Positif',
+                    '2': 'Perlu Perhatian - Butuh Monitoring',
+                    '3': 'Butuh Bantuan - Perlu Intervensi'
+                };
+                
+                const tanggalFormatted = new Date(jurnal.tanggal).toLocaleDateString('id-ID', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                html += `
+                    <div class="journal-entry">
+                        <div class="journal-date">${tanggalFormatted}</div>
+                        <div class="mb-2">
+                            <span class="journal-category category-${jurnal.kategori}">${kategoriText[jurnal.kategori]}</span>
+                            <span class="status-badge status-${jurnal.status}">${statusText[jurnal.status]}</span>
+                        </div>
+                        <div class="journal-info">
+                            <div class="journal-info-item">
+                                <i class="bi bi-person"></i>
+                                <strong>Siswa:</strong> ${jurnal.siswa.nama} (${jurnal.siswa.kelas})
+                            </div>
+                        </div>
+                        <h6>Kegiatan yang Dilakukan:</h6>
+                        <p>${jurnal.kegiatan}</p>
+                        <h6>Evaluasi dan Tindak Lanjut:</h6>
+                        <p>${jurnal.evaluasiTindakLanjut}</p>
+                        <h6>Refleksi:</h6>
+                        <p>${jurnal.refleksi}</p>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-warning" onclick="openEditJurnalModal(${jurnal.id})">
+                                <i class="bi bi-pencil"></i> Edit
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteJurnal(${jurnal.id})">
+                                <i class="bi bi-trash"></i> Hapus
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            jurnalContainer.innerHTML = html;
+        }
+        
+        function deleteJurnal(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus catatan jurnal ini?')) {
+                dataJurnal = dataJurnal.filter(jurnal => jurnal.id !== id);
+                localStorage.setItem('dataJurnal', JSON.stringify(dataJurnal));
+                renderJurnal();
+                alert('Catatan jurnal berhasil dihapus!');
+            }
+        }
+        
+        function renderAnalisis() {
+            const ringkasanContainer = document.getElementById('ringkasan-analisis');
+            const analisisContainer = document.getElementById('daftar-analisis');
+            
+            // Get teacher's journals only
+            const guruJurnal = dataJurnal.filter(jurnal => jurnal.guruId === currentGuru.id);
+            
+            if (guruJurnal.length === 0) {
+                ringkasanContainer.innerHTML = '<div class="alert alert-info">Belum ada data analisis. Silakan tambahkan catatan jurnal terlebih dahulu.</div>';
+                analisisContainer.innerHTML = '<div class="alert alert-info">Belum ada data analisis. Silakan tambahkan catatan jurnal terlebih dahulu.</div>';
+                return;
+            }
+            
+            // Group journals by student
+            const jurnalBySiswa = {};
+            guruJurnal.forEach(jurnal => {
+                const siswaKey = `${jurnal.siswa.nama} (${jurnal.siswa.kelas})`;
+                if (!jurnalBySiswa[siswaKey]) {
+                    jurnalBySiswa[siswaKey] = [];
+                }
+                jurnalBySiswa[siswaKey].push(jurnal);
+            });
+            
+            // Calculate summary
+            const statusSummary = {
+                '1': 0,
+                '2': 0,
+                '3': 0
+            };
+            
+            const kategoriSummary = {
+                '1': 0,
+                '2': 0,
+                '3': 0
+            };
+            
+            guruJurnal.forEach(jurnal => {
+                statusSummary[jurnal.status]++;
+                kategoriSummary[jurnal.kategori]++;
+            });
+            
+            // Render summary
+            let ringkasanHtml = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Ringkasan Status Bimbingan</h6>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Jumlah</th>
+                                    <th>Presentase</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="status-badge status-1">Baik - Kondisi Positif</span></td>
+                                    <td>${statusSummary['1']}</td>
+                                    <td>${guruJurnal.length > 0 ? Math.round((statusSummary['1'] / guruJurnal.length) * 100) : 0}%</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-badge status-2">Perlu Perhatian - Butuh Monitoring</span></td>
+                                    <td>${statusSummary['2']}</td>
+                                    <td>${guruJurnal.length > 0 ? Math.round((statusSummary['2'] / guruJurnal.length) * 100) : 0}%</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-badge status-3">Butuh Bantuan - Perlu Intervensi</span></td>
+                                    <td>${statusSummary['3']}</td>
+                                    <td>${guruJurnal.length > 0 ? Math.round((statusSummary['3'] / guruJurnal.length) * 100) : 0}%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Ringkasan Kategori Kegiatan</h6>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Kategori</th>
+                                    <th>Jumlah</th>
+                                    <th>Presentase</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Pendampingan Akademik</td>
+                                    <td>${kategoriSummary['1']}</td>
+                                    <td>${guruJurnal.length > 0 ? Math.round((kategoriSummary['1'] / guruJurnal.length) * 100) : 0}%</td>
+                                </tr>
+                                <tr>
+                                    <td>Pengembangan Kompetensi dan Keterampilan</td>
+                                    <td>${kategoriSummary['2']}</td>
+                                    <td>${guruJurnal.length > 0 ? Math.round((kategoriSummary['2'] / guruJurnal.length) * 100) : 0}%</td>
+                                </tr>
+                                <tr>
+                                    <td>Pembentukan Karakter</td>
+                                    <td>${kategoriSummary['3']}</td>
+                                    <td>${guruJurnal.length > 0 ? Math.round((kategoriSummary['3'] / guruJurnal.length) * 100) : 0}%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            
+            ringkasanContainer.innerHTML = ringkasanHtml;
+            
+            // Render detailed analysis
+            let analisisHtml = '';
+            
+            Object.keys(jurnalBySiswa).forEach(siswaKey => {
+                const siswaJurnals = jurnalBySiswa[siswaKey];
+                const sortedJurnals = [...siswaJurnals].sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+                
+                analisisHtml += `
+                    <div class="analysis-card">
+                        <div class="analysis-header">
+                            <div class="analysis-title">${siswaKey}</div>
+                            <div class="analysis-date">${siswaJurnals.length} catatan jurnal</div>
+                        </div>
+                `;
+                
+                sortedJurnals.forEach(jurnal => {
+                    const kategoriText = {
+                        '1': 'Pendampingan Akademik',
+                        '2': 'Pengembangan Kompetensi dan Keterampilan',
+                        '3': 'Pembentukan Karakter'
+                    };
+                    
+                    const statusText = {
+                        '1': 'Baik - Kondisi Positif',
+                        '2': 'Perlu Perhatian - Butuh Monitoring',
+                        '3': 'Butuh Bantuan - Perlu Intervensi'
+                    };
+                    
+                    const tanggalFormatted = new Date(jurnal.tanggal).toLocaleDateString('id-ID', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    
+                    analisisHtml += `
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <span class="journal-category category-${jurnal.kategori}">${kategoriText[jurnal.kategori]}</span>
+                                    <span class="status-badge status-${jurnal.status}">${statusText[jurnal.status]}</span>
+                                </div>
+                                <small class="text-muted">${tanggalFormatted}</small>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Kegiatan:</strong> ${jurnal.kegiatan}
+                            </div>
+                            <div class="mb-2">
+                                <strong>Evaluasi dan Tindak Lanjut:</strong> ${jurnal.evaluasiTindakLanjut}
+                            </div>
+                            <div>
+                                <strong>Refleksi:</strong> ${jurnal.refleksi}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                analisisHtml += `
+                    </div>
+                `;
+            });
+            
+            analisisContainer.innerHTML = analisisHtml;
+        }
+        
+        function prepareCetak() {
+            const bulan = document.getElementById('bulan-cetak').value;
+            const tahun = document.getElementById('tahun-cetak').value;
+            
+            if (!bulan || !tahun) {
+                alert('Silakan pilih bulan dan tahun terlebih dahulu!');
+                return;
+            }
+            
+            // Filter journals by selected month, year, and teacher
+            const filteredJurnal = dataJurnal.filter(jurnal => {
+                const jurnalDate = new Date(jurnal.tanggal);
+                const jurnalMonth = (jurnalDate.getMonth() + 1).toString().padStart(2, '0');
+                const jurnalYear = jurnalDate.getFullYear().toString();
+                return jurnalMonth === bulan && jurnalYear === tahun && jurnal.guruId === currentGuru.id;
+            });
+            
+            // Sort filtered journals by date
+            const sortedJurnal = [...filteredJurnal].sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
+            
+            // Update print page header
+            document.getElementById('print-guru').textContent = currentGuru.nama;
+            
+            const monthNames = {
+                '01': 'Januari',
+                '02': 'Februari',
+                '03': 'Maret',
+                '04': 'April',
+                '05': 'Mei',
+                '06': 'Juni',
+                '07': 'Juli',
+                '08': 'Agustus',
+                '09': 'September',
+                '10': 'Oktober',
+                '11': 'November',
+                '12': 'Desember'
+            };
+            
+            document.getElementById('print-periode').textContent = `${monthNames[bulan]} ${tahun}`;
+            
+            const today = new Date();
+            const todayFormatted = today.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('print-tanggal').textContent = todayFormatted;
+            
+            // Render filtered journals
+            const cetakJurnalContainer = document.getElementById('cetak-daftar-jurnal');
+            
+            if (sortedJurnal.length === 0) {
+                cetakJurnalContainer.innerHTML = '<div class="alert alert-info">Tidak ada data jurnal untuk periode yang dipilih.</div>';
+            } else {
+                let html = '';
+                
+                // Create table for print view
+                html += `
+                    <table class="print-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Tanggal</th>
+                                <th>Siswa</th>
+                                <th>Kategori</th>
+                                <th>Status Bimbingan</th>
+                                <th>Kegiatan</th>
+                                <th>Evaluasi dan Tindak Lanjut</th>
+                                <th>Refleksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                sortedJurnal.forEach((jurnal, index) => {
+                    const kategoriText = {
+                        '1': 'Pendampingan Akademik',
+                        '2': 'Pengembangan Kompetensi dan Keterampilan',
+                        '3': 'Pembentukan Karakter'
+                    };
+                    
+                    const statusText = {
+                        '1': 'Baik - Kondisi Positif',
+                        '2': 'Perlu Perhatian - Butuh Monitoring',
+                        '3': 'Butuh Bantuan - Perlu Intervensi'
+                    };
+                    
+                    const tanggalFormatted = new Date(jurnal.tanggal).toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'numeric',
+                        year: 'numeric'
+                    });
+                    
+                    html += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${tanggalFormatted}</td>
+                            <td>${jurnal.siswa.nama}<br><small>${jurnal.siswa.kelas}</small></td>
+                            <td>${kategoriText[jurnal.kategori]}</td>
+                            <td>${statusText[jurnal.status]}</td>
+                            <td>${jurnal.kegiatan}</td>
+                            <td>${jurnal.evaluasiTindakLanjut}</td>
+                            <td>${jurnal.refleksi}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                        </tbody>
+                    </table>
+                `;
+                
+                // Add summary section
+                const summary = {
+                    '1': 0,
+                    '2': 0,
+                    '3': 0
+                };
+                
+                const statusSummary = {
+                    '1': 0,
+                    '2': 0,
+                    '3': 0
+                };
+                
+                sortedJurnal.forEach(jurnal => {
+                    summary[jurnal.kategori]++;
+                    statusSummary[jurnal.status]++;
+                });
+                
+                html += `
+                    <div class="mt-4">
+                        <h5>Ringkasan Kegiatan</h5>
+                        <table class="print-table">
+                            <thead>
+                                <tr>
+                                    <th>Kategori</th>
+                                    <th>Jumlah Kegiatan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Pendampingan Akademik</td>
+                                    <td>${summary['1']}</td>
+                                </tr>
+                                <tr>
+                                    <td>Pengembangan Kompetensi dan Keterampilan</td>
+                                    <td>${summary['2']}</td>
+                                </tr>
+                                <tr>
+                                    <td>Pembentukan Karakter</td>
+                                    <td>${summary['3']}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total</strong></td>
+                                    <td><strong>${sortedJurnal.length}</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h5>Ringkasan Status Bimbingan</h5>
+                        <table class="print-table">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Jumlah Siswa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Baik - Kondisi Positif</td>
+                                    <td>${statusSummary['1']}</td>
+                                </tr>
+                                <tr>
+                                    <td>Perlu Perhatian - Butuh Monitoring</td>
+                                    <td>${statusSummary['2']}</td>
+                                </tr>
+                                <tr>
+                                    <td>Butuh Bantuan - Perlu Intervensi</td>
+                                    <td>${statusSummary['3']}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total</strong></td>
+                                    <td><strong>${sortedJurnal.length}</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                
+                // Add signature section
+                html += `
+                    <div class="mt-5 row">
+                        <div class="col-md-6">
+                            <p>Mengetahui,</p>
+                            <p>Kepala Sekolah</p>
+                            <br><br><br><br>
+                            <p>_________________________</p>
+                            <p>NIP.</p>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <p>Medan, ${todayFormatted}</p>
+                            <p>Guru Wali</p>
+                            <br><br><br><br>
+                            <p>${currentGuru.nama}</p>
+                            <p>NIP.</p>
+                        </div>
+                    </div>
+                `;
+                
+                cetakJurnalContainer.innerHTML = html;
+            }
+            
+            // Close modal and show print page
+            const modal = bootstrap.Modal.getInstance(document.getElementById('cetakJurnalModal'));
+            modal.hide();
+            
+            // Show print page
+            showGuruPage('cetak-jurnal');
+            
+            // Wait for page to render, then print
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
+    </script>
+</body>
+</html>
