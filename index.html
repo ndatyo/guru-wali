@@ -644,7 +644,7 @@
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahJurnalModal">
                                     <i class="bi bi-plus-circle"></i> Tambah Catatan
                                 </button>
-                                <button class="btn btn-success ms-2" data-bs-toggle="modal" data-bs-target="#cetakJurnalModal">
+                                <button class="btn btn-success ms-2" onclick="openCetakModal()">
                                     <i class="bi bi-printer"></i> Cetak Jurnal
                                 </button>
                             </div>
@@ -694,44 +694,46 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Halaman Cetak Jurnal -->
-                    <div id="cetak-jurnal-page" class="guru-page hidden">
-                        <div class="print-header">
-                            <h2>JURNAL KEGIATAN GURU WALI</h2>
-                            <p>SMA NEGERI 20 MEDAN</p>
-                        </div>
-                        
-                        <div class="print-info">
-                            <div>
-                                <strong>Guru Wali:</strong> <span id="print-guru"></span>
-                            </div>
-                            <div>
-                                <strong>Periode:</strong> <span id="print-periode"></span>
-                            </div>
-                            <div>
-                                <strong>Tanggal Cetak:</strong> <span id="print-tanggal"></span>
-                            </div>
-                        </div>
-                        
-                        <div class="card">
-                            <div class="card-header">
-                                <h5>Daftar Catatan Jurnal</h5>
-                            </div>
-                            <div class="card-body">
-                                <div id="cetak-daftar-jurnal">
-                                    <div class="alert alert-info">
-                                        Tidak ada data jurnal untuk periode yang dipilih.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="print-footer mt-5">
-                            <p>© 2025 Aplikasi Guru Wali - SMA NEGERI 20 MEDAN</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Halaman Cetak Jurnal -->
+    <div id="cetak-jurnal-page" class="page hidden">
+        <div class="container-fluid">
+            <div class="print-header">
+                <h2>JURNAL KEGIATAN GURU WALI</h2>
+                <p>SMA NEGERI 20 MEDAN</p>
+            </div>
+            
+            <div class="print-info">
+                <div>
+                    <strong>Guru Wali:</strong> <span id="print-guru"></span>
+                </div>
+                <div>
+                    <strong>Periode:</strong> <span id="print-periode"></span>
+                </div>
+                <div>
+                    <strong>Tanggal Cetak:</strong> <span id="print-tanggal"></span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5>Daftar Catatan Jurnal</h5>
+                </div>
+                <div class="card-body">
+                    <div id="cetak-daftar-jurnal">
+                        <div class="alert alert-info">
+                            Tidak ada data jurnal untuk periode yang dipilih.
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <div class="print-footer mt-5">
+                <p>© 2025 Aplikasi Guru Wali - SMA NEGERI 20 MEDAN</p>
             </div>
         </div>
     </div>
@@ -1119,10 +1121,21 @@
             } else if (pageId === 'jurnal') {
                 renderJurnal();
                 updateSiswaOptions();
-                updateSiswaOptionsCetak();
             } else if (pageId === 'analisis') {
                 renderAnalisis();
             }
+        }
+        
+        // Function to show print page
+        function showPrintPage() {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show print page
+            document.getElementById('cetak-jurnal-page').classList.remove('hidden');
         }
         
         // Admin functions
@@ -1253,7 +1266,6 @@
             renderJurnal();
             renderAnalisis();
             updateSiswaOptions();
-            updateSiswaOptionsCetak();
         }
         
         function saveSiswa() {
@@ -1281,7 +1293,6 @@
                 
                 renderTabelSiswa();
                 updateSiswaOptions();
-                updateSiswaOptionsCetak();
                 
                 // Reset form and close modal
                 document.getElementById('siswa-form').reset();
@@ -1295,21 +1306,6 @@
         function updateSiswaOptions() {
             const siswaSelect = document.getElementById('siswa-jurnal');
             siswaSelect.innerHTML = '<option value="">Pilih siswa</option>';
-            
-            // Get teacher's students only
-            const guruSiswa = dataSiswa.filter(siswa => siswa.guruId === currentGuru.id);
-            
-            guruSiswa.forEach(siswa => {
-                const option = document.createElement('option');
-                option.value = siswa.id;
-                option.textContent = `${siswa.nama} (${siswa.kelas})`;
-                siswaSelect.appendChild(option);
-            });
-        }
-        
-        function updateSiswaOptionsCetak() {
-            const siswaSelect = document.getElementById('siswa-cetak');
-            siswaSelect.innerHTML = '<option value="">Semua Siswa</option>';
             
             // Get teacher's students only
             const guruSiswa = dataSiswa.filter(siswa => siswa.guruId === currentGuru.id);
@@ -1362,7 +1358,6 @@
                 localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
                 renderTabelSiswa();
                 updateSiswaOptions();
-                updateSiswaOptionsCetak();
                 alert('Data siswa berhasil dihapus!');
             }
         }
@@ -1699,6 +1694,27 @@
             analisisContainer.innerHTML = analisisHtml;
         }
         
+        // Open print modal
+        function openCetakModal() {
+            // Update siswa options
+            const siswaSelect = document.getElementById('siswa-cetak');
+            siswaSelect.innerHTML = '<option value="">Semua Siswa</option>';
+            
+            // Get teacher's students only
+            const guruSiswa = dataSiswa.filter(siswa => siswa.guruId === currentGuru.id);
+            
+            guruSiswa.forEach(siswa => {
+                const option = document.createElement('option');
+                option.value = siswa.id;
+                option.textContent = `${siswa.nama} (${siswa.kelas})`;
+                siswaSelect.appendChild(option);
+            });
+            
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('cetakJurnalModal'));
+            modal.show();
+        }
+        
         function prepareCetak() {
             const siswaId = document.getElementById('siswa-cetak').value;
             const tanggalMulai = document.getElementById('tanggal-mulai-cetak').value;
@@ -1926,12 +1942,12 @@
                 cetakJurnalContainer.innerHTML = html;
             }
             
-            // Close modal and show print page
+            // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('cetakJurnalModal'));
             modal.hide();
             
             // Show print page
-            showGuruPage('cetak-jurnal');
+            showPrintPage();
             
             // Wait for page to render, then print
             setTimeout(() => {
