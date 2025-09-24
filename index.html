@@ -188,7 +188,7 @@
                 padding: 0;
             }
             
-            .sidebar, .footer, .btn, .no-print, .modal {
+            .sidebar, .footer, .btn, .no-print, .modal, .back-button {
                 display: none !important;
             }
             
@@ -397,6 +397,29 @@
             .row > div {
                 padding: 0;
             }
+        }
+        
+        /* Back button styles */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background-color: #0b5ed7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -813,6 +836,10 @@
     
     <!-- Halaman Cetak Jurnal -->
     <div id="cetak-jurnal-page" class="page hidden">
+        <button class="back-button no-print" onclick="backToJurnal()">
+            <i class="bi bi-arrow-left"></i> Kembali ke Jurnal
+        </button>
+        
         <div class="container-fluid">
             <div class="print-header">
                 <div class="sekolah">SMA NEGERI 20 MEDAN</div>
@@ -1244,6 +1271,21 @@
             
             // Show print page
             document.getElementById('cetak-jurnal-page').classList.remove('hidden');
+        }
+        
+        // Function to go back to journal page
+        function backToJurnal() {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show guru page
+            document.getElementById('guru-page').classList.remove('hidden');
+            
+            // Show journal subpage
+            showGuruPage('jurnal');
         }
         
         // Admin functions
