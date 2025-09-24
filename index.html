@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Guru Wali</title>
+    <title>Aplikasi Guru Wali - Supabase Version</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Tambahkan Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
     <style>
+        /* Style tetap sama seperti sebelumnya */
         body {
             background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -474,6 +477,19 @@
             color: #856404;
             border: 1px solid #ffeeba;
         }
+
+        /* Loading spinner */
+        .spinner-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
     </style>
 </head>
 <body>
@@ -607,7 +623,7 @@
                                 <h5>Data Guru</h5>
                                 <div>
                                     <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#importGuruModal">
-                                        <i class="bi bi-file-earmark-arrow-up"></i> Import Guru
+                                        <i class="bi bi-file-earrow-up"></i> Import Guru
                                     </button>
                                     <button class="btn btn-sm btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#tambahGuruModal">
                                         <i class="bi bi-plus-circle"></i> Tambah Guru
@@ -628,7 +644,13 @@
                                         </thead>
                                         <tbody id="tabel-guru">
                                             <tr>
-                                                <td colspan="5" class="text-center">Belum ada data guru</td>
+                                                <td colspan="5" class="text-center">
+                                                    <div class="spinner-container">
+                                                        <div class="spinner-border text-primary" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -801,7 +823,7 @@
                                 <h5>Data Siswa</h5>
                                 <div>
                                     <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#importSiswaModal">
-                                        <i class="bi bi-file-earmark-arrow-up"></i> Import Siswa
+                                        <i class="bi bi-file-earrow-up"></i> Import Siswa
                                     </button>
                                     <button class="btn btn-sm btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#tambahSiswaModal">
                                         <i class="bi bi-plus-circle"></i> Tambah Siswa
@@ -825,7 +847,13 @@
                                         </thead>
                                         <tbody id="tabel-siswa">
                                             <tr>
-                                                <td colspan="8" class="text-center">Belum ada data siswa</td>
+                                                <td colspan="8" class="text-center">
+                                                    <div class="spinner-container">
+                                                        <div class="spinner-border text-primary" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -854,8 +882,10 @@
                             </div>
                             <div class="card-body">
                                 <div id="daftar-jurnal">
-                                    <div class="alert alert-info">
-                                        Belum ada catatan jurnal. Silakan tambahkan catatan baru.
+                                    <div class="spinner-container">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -872,8 +902,10 @@
                             </div>
                             <div class="card-body">
                                 <div id="ringkasan-analisis">
-                                    <div class="alert alert-info">
-                                        Belum ada data analisis. Silakan tambahkan catatan jurnal terlebih dahulu.
+                                    <div class="spinner-container">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -885,8 +917,10 @@
                             </div>
                             <div class="card-body">
                                 <div id="daftar-analisis">
-                                    <div class="alert alert-info">
-                                        Belum ada data analisis. Silakan tambahkan catatan jurnal terlebih dahulu.
+                                    <div class="spinner-container">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1242,12 +1276,16 @@
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Konfigurasi Supabase - GANTI dengan URL dan KEY dari project Supabase Anda
+        const SUPABASE_URL = 'https://your-project-id.supabase.co';
+        const SUPABASE_KEY = 'your-supabase-key';
+        
+        // Inisialisasi Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
         // Data storage
-        let dataGuru = JSON.parse(localStorage.getItem('dataGuru')) || [];
-        let dataSiswa = JSON.parse(localStorage.getItem('dataSiswa')) || [];
-        let dataJurnal = JSON.parse(localStorage.getItem('dataJurnal')) || [];
-        let dataKepalaSekolah = JSON.parse(localStorage.getItem('dataKepalaSekolah')) || { nama: '', nip: '' };
         let currentGuru = null;
+        let dataKepalaSekolah = { nama: '', nip: '' };
         
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -1267,11 +1305,7 @@
             }
             
             // Load kepala sekolah data
-            if (dataKepalaSekolah.nama) {
-                document.getElementById('nama-kepala-sekolah').value = dataKepalaSekolah.nama;
-                document.getElementById('nip-kepala-sekolah').value = dataKepalaSekolah.nip;
-                document.getElementById('kepala-sekolah-terdaftar').textContent = `${dataKepalaSekolah.nama} (${dataKepalaSekolah.nip})`;
-            }
+            loadKepalaSekolah();
             
             // Setup file input listeners for import features
             setupImportListeners();
@@ -1296,27 +1330,71 @@
             });
         }
         
+        // Load kepala sekolah data
+        async function loadKepalaSekolah() {
+            try {
+                const { data, error } = await supabase
+                    .from('headmasters')
+                    .select('*')
+                    .single();
+                
+                if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
+                    console.error('Error loading headmaster:', error);
+                    return;
+                }
+                
+                if (data) {
+                    dataKepalaSekolah = {
+                        id: data.id,
+                        nama: data.nama,
+                        nip: data.nip
+                    };
+                    
+                    document.getElementById('nama-kepala-sekolah').value = dataKepalaSekolah.nama;
+                    document.getElementById('nip-kepala-sekolah').value = dataKepalaSekolah.nip;
+                    document.getElementById('kepala-sekolah-terdaftar').textContent = `${dataKepalaSekolah.nama} (${dataKepalaSekolah.nip})`;
+                }
+            } catch (error) {
+                console.error('Error in loadKepalaSekolah:', error);
+            }
+        }
+        
         // Login functions
-        document.getElementById('login-guru-form').addEventListener('submit', function(e) {
+        document.getElementById('login-guru-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const username = document.getElementById('username-guru').value;
             const password = document.getElementById('password-guru').value;
             
-            // Find teacher in data
-            const guru = dataGuru.find(g => g.username === username && g.password === password);
-            
-            if (guru) {
-                currentGuru = guru;
-                sessionStorage.setItem('loggedInUser', JSON.stringify({
-                    id: guru.id,
-                    nama: guru.nama,
-                    nip: guru.nip,
-                    username: guru.username,
-                    role: 'guru'
-                }));
-                showGuruDashboard();
-            } else {
-                alert('Username atau password salah!');
+            try {
+                // Find teacher in database
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('username', username)
+                    .eq('password', password)
+                    .eq('role', 'guru')
+                    .single();
+                
+                if (error) {
+                    alert('Username atau password salah!');
+                    return;
+                }
+                
+                if (data) {
+                    currentGuru = {
+                        id: data.id,
+                        nama: data.nama,
+                        nip: data.nip,
+                        username: data.username,
+                        role: 'guru'
+                    };
+                    
+                    sessionStorage.setItem('loggedInUser', JSON.stringify(currentGuru));
+                    showGuruDashboard();
+                }
+            } catch (error) {
+                console.error('Error in login:', error);
+                alert('Terjadi kesalahan saat login. Silakan coba lagi.');
             }
         });
         
@@ -1327,10 +1405,12 @@
             
             // Check admin credentials (default: admin/admin123)
             if (username === 'admin' && password === 'admin123') {
-                sessionStorage.setItem('loggedInUser', JSON.stringify({
+                const adminUser = {
                     username: username,
                     role: 'admin'
-                }));
+                };
+                
+                sessionStorage.setItem('loggedInUser', JSON.stringify(adminUser));
                 showAdminDashboard();
             } else {
                 alert('Username atau password salah!');
@@ -1412,7 +1492,7 @@
             
             // Find the link that matches the page and set it as active
             navLinks.forEach(link => {
-                if (link.getAttribute('onclick').includes(pageId)) {
+                if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(pageId)) {
                     link.classList.add('active');
                 }
             });
@@ -1485,107 +1565,159 @@
         }
         
         // Admin functions
-        function updateAdminDashboardStats() {
-            // Calculate stats
-            const totalGuru = dataGuru.length;
-            let totalSiswa = 0;
-            let totalJurnal = 0;
-            
-            // Count students and journals from all teachers
-            dataGuru.forEach(guru => {
-                const guruSiswa = dataSiswa.filter(s => s.guruId === guru.id);
-                const guruJurnal = dataJurnal.filter(j => j.guruId === guru.id);
+        async function updateAdminDashboardStats() {
+            try {
+                // Get total teachers
+                const { data: guruData, error: guruError } = await supabase
+                    .from('users')
+                    .select('*', { count: 'exact' })
+                    .eq('role', 'guru');
                 
-                totalSiswa += guruSiswa.length;
-                totalJurnal += guruJurnal.length;
-            });
-            
-            // Update UI
-            document.getElementById('total-guru').textContent = totalGuru;
-            document.getElementById('total-siswa').textContent = totalSiswa;
-            document.getElementById('total-jurnal').textContent = totalJurnal;
+                // Get total students
+                const { data: siswaData, error: siswaError } = await supabase
+                    .from('students')
+                    .select('*', { count: 'exact' });
+                
+                // Get total journals
+                const { data: jurnalData, error: jurnalError } = await supabase
+                    .from('journals')
+                    .select('*', { count: 'exact' });
+                
+                if (guruError || siswaError || jurnalError) {
+                    console.error('Error loading dashboard stats:', guruError || siswaError || jurnalError);
+                    return;
+                }
+                
+                // Update UI
+                document.getElementById('total-guru').textContent = guruData.length || 0;
+                document.getElementById('total-siswa').textContent = siswaData.length || 0;
+                document.getElementById('total-jurnal').textContent = jurnalData.length || 0;
+            } catch (error) {
+                console.error('Error in updateAdminDashboardStats:', error);
+            }
         }
         
-        function saveGuru() {
+        async function saveGuru() {
             const namaGuru = document.getElementById('nama-guru-baru').value;
             const nipGuru = document.getElementById('nip-guru-baru').value;
             const usernameGuru = document.getElementById('username-guru-baru').value;
             const passwordGuru = document.getElementById('password-guru-baru').value;
             
             if (namaGuru && nipGuru && usernameGuru && passwordGuru) {
-                // Check if username already exists
-                if (dataGuru.some(g => g.username === usernameGuru)) {
-                    alert('Username sudah digunakan!');
+                try {
+                    // Check if username already exists
+                    const { data: existingUser, error: checkError } = await supabase
+                        .from('users')
+                        .select('username')
+                        .eq('username', usernameGuru)
+                        .single();
+                    
+                    if (existingUser) {
+                        alert('Username sudah digunakan!');
+                        return;
+                    }
+                    
+                    // Insert new teacher
+                    const { data, error } = await supabase
+                        .from('users')
+                        .insert([
+                            {
+                                nama: namaGuru,
+                                nip: nipGuru,
+                                username: usernameGuru,
+                                password: passwordGuru,
+                                role: 'guru'
+                            }
+                        ])
+                        .select();
+                    
+                    if (error) {
+                        console.error('Error saving teacher:', error);
+                        alert('Gagal menyimpan data guru: ' + error.message);
+                        return;
+                    }
+                    
+                    renderTabelGuru();
+                    updateAdminDashboardStats();
+                    
+                    // Reset form and close modal
+                    document.getElementById('guru-form').reset();
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('tambahGuruModal'));
+                    modal.hide();
+                    
+                    alert('Data guru berhasil ditambahkan!');
+                } catch (error) {
+                    console.error('Error in saveGuru:', error);
+                    alert('Terjadi kesalahan saat menyimpan data guru.');
+                }
+            }
+        }
+        
+        async function renderTabelGuru() {
+            const tabelBody = document.getElementById('tabel-guru');
+            
+            try {
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('role', 'guru');
+                
+                if (error) {
+                    console.error('Error loading teachers:', error);
+                    tabelBody.innerHTML = '<tr><td colspan="5" class="text-center">Gagal memuat data guru</td></tr>';
                     return;
                 }
                 
-                const newGuru = {
-                    id: Date.now(),
-                    nama: namaGuru,
-                    nip: nipGuru,
-                    username: usernameGuru,
-                    password: passwordGuru
-                };
+                if (data.length === 0) {
+                    tabelBody.innerHTML = '<tr><td colspan="5" class="text-center">Belum ada data guru</td></tr>';
+                    return;
+                }
                 
-                dataGuru.push(newGuru);
-                localStorage.setItem('dataGuru', JSON.stringify(dataGuru));
+                let html = '';
+                data.forEach((guru, index) => {
+                    html += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${guru.nama}</td>
+                            <td>${guru.nip}</td>
+                            <td>${guru.username}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick="deleteGuru('${guru.id}')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
                 
-                renderTabelGuru();
-                updateAdminDashboardStats();
-                
-                // Reset form and close modal
-                document.getElementById('guru-form').reset();
-                const modal = bootstrap.Modal.getInstance(document.getElementById('tambahGuruModal'));
-                modal.hide();
-                
-                alert('Data guru berhasil ditambahkan!');
+                tabelBody.innerHTML = html;
+            } catch (error) {
+                console.error('Error in renderTabelGuru:', error);
+                tabelBody.innerHTML = '<tr><td colspan="5" class="text-center">Gagal memuat data guru</td></tr>';
             }
         }
         
-        function renderTabelGuru() {
-            const tabelBody = document.getElementById('tabel-guru');
-            
-            if (dataGuru.length === 0) {
-                tabelBody.innerHTML = '<tr><td colspan="5" class="text-center">Belum ada data guru</td></tr>';
-                return;
-            }
-            
-            let html = '';
-            dataGuru.forEach((guru, index) => {
-                html += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${guru.nama}</td>
-                        <td>${guru.nip}</td>
-                        <td>${guru.username}</td>
-                        <td>
-                            <button class="btn btn-sm btn-danger" onclick="deleteGuru(${guru.id})">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            tabelBody.innerHTML = html;
-        }
-        
-        function deleteGuru(id) {
+        async function deleteGuru(id) {
             if (confirm('Apakah Anda yakin ingin menghapus data guru ini? Semua data terkait guru ini juga akan dihapus.')) {
-                // Delete teacher
-                dataGuru = dataGuru.filter(guru => guru.id !== id);
-                
-                // Delete related students and journals
-                dataSiswa = dataSiswa.filter(siswa => siswa.guruId !== id);
-                dataJurnal = dataJurnal.filter(jurnal => jurnal.guruId !== id);
-                
-                localStorage.setItem('dataGuru', JSON.stringify(dataGuru));
-                localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
-                localStorage.setItem('dataJurnal', JSON.stringify(dataJurnal));
-                
-                renderTabelGuru();
-                updateAdminDashboardStats();
-                alert('Data guru berhasil dihapus!');
+                try {
+                    const { error } = await supabase
+                        .from('users')
+                        .delete()
+                        .eq('id', id);
+                    
+                    if (error) {
+                        console.error('Error deleting teacher:', error);
+                        alert('Gagal menghapus data guru: ' + error.message);
+                        return;
+                    }
+                    
+                    renderTabelGuru();
+                    updateAdminDashboardStats();
+                    alert('Data guru berhasil dihapus!');
+                } catch (error) {
+                    console.error('Error in deleteGuru:', error);
+                    alert('Terjadi kesalahan saat menghapus data guru.');
+                }
             }
         }
         
@@ -1657,9 +1789,6 @@
                     } else if (!rowData.password || rowData.password.length < 6) {
                         status = 'Error';
                         errorMsg = 'Password minimal 6 karakter';
-                    } else if (dataGuru.some(g => g.username === rowData.username)) {
-                        status = 'Error';
-                        errorMsg = 'Username sudah digunakan';
                     }
                     
                     if (status === 'Error') {
@@ -1724,7 +1853,7 @@
             statusContainer.classList.remove('hidden');
         }
         
-        function processGuruImport() {
+        async function processGuruImport() {
             const fileInput = document.getElementById('file-guru');
             const file = fileInput.files[0];
             
@@ -1732,7 +1861,7 @@
             
             const reader = new FileReader();
             
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
                 const text = e.target.result;
                 const lines = text.split('\n');
                 
@@ -1742,6 +1871,7 @@
                 // Parse data rows
                 let successCount = 0;
                 let errorCount = 0;
+                const teachersToInsert = [];
                 
                 for (let i = 1; i < lines.length; i++) {
                     const line = lines[i].trim();
@@ -1761,60 +1891,114 @@
                     
                     // Validate data
                     if (!rowData.nama || !rowData.nip || !rowData.username || 
-                        !rowData.password || rowData.password.length < 6 ||
-                        dataGuru.some(g => g.username === rowData.username)) {
+                        !rowData.password || rowData.password.length < 6) {
                         errorCount++;
                         continue;
                     }
                     
-                    // Add to dataGuru
-                    const newGuru = {
-                        id: Date.now() + i, // Ensure unique ID
+                    // Add to array for batch insert
+                    teachersToInsert.push({
                         nama: rowData.nama,
                         nip: rowData.nip,
                         username: rowData.username,
-                        password: rowData.password
-                    };
+                        password: rowData.password,
+                        role: 'guru'
+                    });
                     
-                    dataGuru.push(newGuru);
                     successCount++;
                 }
                 
-                // Save to localStorage
-                localStorage.setItem('dataGuru', JSON.stringify(dataGuru));
-                
-                // Update UI
-                renderTabelGuru();
-                updateAdminDashboardStats();
-                
-                // Show result
-                showGuruImportStatus('success', `Import selesai. ${successCount} data berhasil diimport, ${errorCount} data gagal.`);
-                
-                // Reset form
-                fileInput.value = '';
-                document.getElementById('guru-import-preview').classList.add('hidden');
-                document.getElementById('process-guru-import-btn').disabled = true;
+                if (teachersToInsert.length > 0) {
+                    try {
+                        const { data, error } = await supabase
+                            .from('users')
+                            .insert(teachersToInsert)
+                            .select();
+                        
+                        if (error) {
+                            console.error('Error importing teachers:', error);
+                            showGuruImportStatus('error', `Gagal import: ${error.message}`);
+                            return;
+                        }
+                        
+                        // Update UI
+                        renderTabelGuru();
+                        updateAdminDashboardStats();
+                        
+                        // Show result
+                        showGuruImportStatus('success', `Import selesai. ${successCount} data berhasil diimport, ${errorCount} data gagal.`);
+                        
+                        // Reset form
+                        fileInput.value = '';
+                        document.getElementById('guru-import-preview').classList.add('hidden');
+                        document.getElementById('process-guru-import-btn').disabled = true;
+                    } catch (error) {
+                        console.error('Error in processGuruImport:', error);
+                        showGuruImportStatus('error', 'Terjadi kesalahan saat import data guru.');
+                    }
+                }
             };
             
             reader.readAsText(file);
         }
         
         // Kepala sekolah functions
-        document.getElementById('kepala-sekolah-form').addEventListener('submit', function(e) {
+        document.getElementById('kepala-sekolah-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const namaKepalaSekolah = document.getElementById('nama-kepala-sekolah').value;
             const nipKepalaSekolah = document.getElementById('nip-kepala-sekolah').value;
             
             if (namaKepalaSekolah && nipKepalaSekolah) {
-                dataKepalaSekolah = {
-                    nama: namaKepalaSekolah,
-                    nip: nipKepalaSekolah
-                };
-                
-                localStorage.setItem('dataKepalaSekolah', JSON.stringify(dataKepalaSekolah));
-                document.getElementById('kepala-sekolah-terdaftar').textContent = `${namaKepalaSekolah} (${nipKepalaSekolah})`;
-                
-                alert('Data kepala sekolah berhasil disimpan!');
+                try {
+                    if (dataKepalaSekolah.id) {
+                        // Update existing headmaster
+                        const { error } = await supabase
+                            .from('headmasters')
+                            .update({
+                                nama: namaKepalaSekolah,
+                                nip: nipKepalaSekolah
+                            })
+                            .eq('id', dataKepalaSekolah.id);
+                        
+                        if (error) {
+                            console.error('Error updating headmaster:', error);
+                            alert('Gagal memperbarui data kepala sekolah: ' + error.message);
+                            return;
+                        }
+                    } else {
+                        // Insert new headmaster
+                        const { data, error } = await supabase
+                            .from('headmasters')
+                            .insert([
+                                {
+                                    nama: namaKepalaSekolah,
+                                    nip: nipKepalaSekolah
+                                }
+                            ])
+                            .select();
+                        
+                        if (error) {
+                            console.error('Error saving headmaster:', error);
+                            alert('Gagal menyimpan data kepala sekolah: ' + error.message);
+                            return;
+                        }
+                        
+                        if (data && data.length > 0) {
+                            dataKepalaSekolah = {
+                                id: data[0].id,
+                                nama: data[0].nama,
+                                nip: data[0].nip
+                            };
+                        }
+                    }
+                    
+                    document.getElementById('kepala-sekolah-terdaftar').textContent = `${namaKepalaSekolah} (${nipKepalaSekolah})`;
+                    
+                    alert('Data kepala sekolah berhasil disimpan!');
+                } catch (error) {
+                    console.error('Error in saving headmaster:', error);
+                    alert('Terjadi kesalahan saat menyimpan data kepala sekolah.');
+                }
             }
         });
         
@@ -1827,7 +2011,7 @@
             updateSiswaOptions();
         }
         
-        function saveSiswa() {
+        async function saveSiswa() {
             const namaSiswa = document.getElementById('nama-siswa').value;
             const kelasSiswa = document.getElementById('kelas-siswa').value;
             const nisSiswa = document.getElementById('nis-siswa').value;
@@ -1836,88 +2020,140 @@
             const agamaSiswa = document.getElementById('agama-siswa').value;
             
             if (namaSiswa && kelasSiswa && nisSiswa && nisnSiswa && jkSiswa && agamaSiswa) {
-                const newSiswa = {
-                    id: Date.now(),
-                    guruId: currentGuru.id,
-                    nama: namaSiswa,
-                    kelas: kelasSiswa,
-                    nis: nisSiswa,
-                    nisn: nisnSiswa,
-                    jk: jkSiswa,
-                    agama: agamaSiswa
-                };
-                
-                dataSiswa.push(newSiswa);
-                localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
-                
-                renderTabelSiswa();
-                updateSiswaOptions();
-                
-                // Reset form and close modal
-                document.getElementById('siswa-form').reset();
-                const modal = bootstrap.Modal.getInstance(document.getElementById('tambahSiswaModal'));
-                modal.hide();
-                
-                alert('Data siswa berhasil ditambahkan!');
+                try {
+                    const { data, error } = await supabase
+                        .from('students')
+                        .insert([
+                            {
+                                guru_id: currentGuru.id,
+                                nama: namaSiswa,
+                                kelas: kelasSiswa,
+                                nis: nisSiswa,
+                                nisn: nisnSiswa,
+                                jk: jkSiswa,
+                                agama: agamaSiswa
+                            }
+                        ])
+                        .select();
+                    
+                    if (error) {
+                        console.error('Error saving student:', error);
+                        alert('Gagal menyimpan data siswa: ' + error.message);
+                        return;
+                    }
+                    
+                    renderTabelSiswa();
+                    updateSiswaOptions();
+                    
+                    // Reset form and close modal
+                    document.getElementById('siswa-form').reset();
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('tambahSiswaModal'));
+                    modal.hide();
+                    
+                    alert('Data siswa berhasil ditambahkan!');
+                } catch (error) {
+                    console.error('Error in saveSiswa:', error);
+                    alert('Terjadi kesalahan saat menyimpan data siswa.');
+                }
             }
         }
         
-        function updateSiswaOptions() {
+        async function updateSiswaOptions() {
             const siswaSelect = document.getElementById('siswa-jurnal');
             siswaSelect.innerHTML = '<option value="">Pilih siswa</option>';
             
-            // Get teacher's students only
-            const guruSiswa = dataSiswa.filter(siswa => siswa.guruId === currentGuru.id);
-            
-            guruSiswa.forEach(siswa => {
-                const option = document.createElement('option');
-                option.value = siswa.id;
-                option.textContent = `${siswa.nama} (${siswa.kelas})`;
-                siswaSelect.appendChild(option);
-            });
+            try {
+                const { data, error } = await supabase
+                    .from('students')
+                    .select('*')
+                    .eq('guru_id', currentGuru.id);
+                
+                if (error) {
+                    console.error('Error loading students:', error);
+                    return;
+                }
+                
+                if (data) {
+                    data.forEach(siswa => {
+                        const option = document.createElement('option');
+                        option.value = siswa.id;
+                        option.textContent = `${siswa.nama} (${siswa.kelas})`;
+                        siswaSelect.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error in updateSiswaOptions:', error);
+            }
         }
         
-        function renderTabelSiswa() {
+        async function renderTabelSiswa() {
             const tabelBody = document.getElementById('tabel-siswa');
             
-            // Get teacher's students only
-            const guruSiswa = dataSiswa.filter(siswa => siswa.guruId === currentGuru.id);
-            
-            if (guruSiswa.length === 0) {
-                tabelBody.innerHTML = '<tr><td colspan="8" class="text-center">Belum ada data siswa</td></tr>';
-                return;
+            try {
+                const { data, error } = await supabase
+                    .from('students')
+                    .select('*')
+                    .eq('guru_id', currentGuru.id);
+                
+                if (error) {
+                    console.error('Error loading students:', error);
+                    tabelBody.innerHTML = '<tr><td colspan="8" class="text-center">Gagal memuat data siswa</td></tr>';
+                    return;
+                }
+                
+                if (data.length === 0) {
+                    tabelBody.innerHTML = '<tr><td colspan="8" class="text-center">Belum ada data siswa</td></tr>';
+                    return;
+                }
+                
+                let html = '';
+                data.forEach((siswa, index) => {
+                    html += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${siswa.nama}</td>
+                            <td>${siswa.kelas}</td>
+                            <td>${siswa.nis}</td>
+                            <td>${siswa.nisn}</td>
+                            <td>${siswa.jk}</td>
+                            <td>${siswa.agama}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick="deleteSiswa('${siswa.id}')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                tabelBody.innerHTML = html;
+            } catch (error) {
+                console.error('Error in renderTabelSiswa:', error);
+                tabelBody.innerHTML = '<tr><td colspan="8" class="text-center">Gagal memuat data siswa</td></tr>';
             }
-            
-            let html = '';
-            guruSiswa.forEach((siswa, index) => {
-                html += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${siswa.nama}</td>
-                        <td>${siswa.kelas}</td>
-                        <td>${siswa.nis}</td>
-                        <td>${siswa.nisn}</td>
-                        <td>${siswa.jk}</td>
-                        <td>${siswa.agama}</td>
-                        <td>
-                            <button class="btn btn-sm btn-danger" onclick="deleteSiswa(${siswa.id})">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            tabelBody.innerHTML = html;
         }
         
-        function deleteSiswa(id) {
+        async function deleteSiswa(id) {
             if (confirm('Apakah Anda yakin ingin menghapus data siswa ini?')) {
-                dataSiswa = dataSiswa.filter(siswa => siswa.id !== id);
-                localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
-                renderTabelSiswa();
-                updateSiswaOptions();
-                alert('Data siswa berhasil dihapus!');
+                try {
+                    const { error } = await supabase
+                        .from('students')
+                        .delete()
+                        .eq('id', id);
+                    
+                    if (error) {
+                        console.error('Error deleting student:', error);
+                        alert('Gagal menghapus data siswa: ' + error.message);
+                        return;
+                    }
+                    
+                    renderTabelSiswa();
+                    updateSiswaOptions();
+                    alert('Data siswa berhasil dihapus!');
+                } catch (error) {
+                    console.error('Error in deleteSiswa:', error);
+                    alert('Terjadi kesalahan saat menghapus data siswa.');
+                }
             }
         }
         
@@ -2068,7 +2304,7 @@
             statusContainer.classList.remove('hidden');
         }
         
-        function processSiswaImport() {
+        async function processSiswaImport() {
             const fileInput = document.getElementById('file-siswa');
             const file = fileInput.files[0];
             
@@ -2076,7 +2312,7 @@
             
             const reader = new FileReader();
             
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
                 const text = e.target.result;
                 const lines = text.split('\n');
                 
@@ -2086,6 +2322,7 @@
                 // Parse data rows
                 let successCount = 0;
                 let errorCount = 0;
+                const studentsToInsert = [];
                 const validAgama = ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu'];
                 const validJenisKelamin = ['Laki-laki', 'Perempuan'];
                 
@@ -2113,65 +2350,93 @@
                         continue;
                     }
                     
-                    // Add to dataSiswa
-                    const newSiswa = {
-                        id: Date.now() + i, // Ensure unique ID
-                        guruId: currentGuru.id,
+                    // Add to array for batch insert
+                    studentsToInsert.push({
+                        guru_id: currentGuru.id,
                         nama: rowData.nama,
                         kelas: rowData.kelas,
                         nis: rowData.nis,
                         nisn: rowData.nisn,
                         jk: rowData.jenis_kelamin,
                         agama: rowData.agama
-                    };
+                    });
                     
-                    dataSiswa.push(newSiswa);
                     successCount++;
                 }
                 
-                // Save to localStorage
-                localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
-                
-                // Update UI
-                renderTabelSiswa();
-                updateSiswaOptions();
-                
-                // Show result
-                showSiswaImportStatus('success', `Import selesai. ${successCount} data berhasil diimport, ${errorCount} data gagal.`);
-                
-                // Reset form
-                fileInput.value = '';
-                document.getElementById('siswa-import-preview').classList.add('hidden');
-                document.getElementById('process-siswa-import-btn').disabled = true;
+                if (studentsToInsert.length > 0) {
+                    try {
+                        const { data, error } = await supabase
+                            .from('students')
+                            .insert(studentsToInsert)
+                            .select();
+                        
+                        if (error) {
+                            console.error('Error importing students:', error);
+                            showSiswaImportStatus('error', `Gagal import: ${error.message}`);
+                            return;
+                        }
+                        
+                        // Update UI
+                        renderTabelSiswa();
+                        updateSiswaOptions();
+                        
+                        // Show result
+                        showSiswaImportStatus('success', `Import selesai. ${successCount} data berhasil diimport, ${errorCount} data gagal.`);
+                        
+                        // Reset form
+                        fileInput.value = '';
+                        document.getElementById('siswa-import-preview').classList.add('hidden');
+                        document.getElementById('process-siswa-import-btn').disabled = true;
+                    } catch (error) {
+                        console.error('Error in processSiswaImport:', error);
+                        showSiswaImportStatus('error', 'Terjadi kesalahan saat import data siswa.');
+                    }
+                }
             };
             
             reader.readAsText(file);
         }
         
-        function openEditJurnalModal(id) {
-            // Find journal data
-            const jurnal = dataJurnal.find(j => j.id === id);
-            if (!jurnal) return;
-            
-            // Fill form with journal data
-            document.getElementById('jurnal-id').value = jurnal.id;
-            document.getElementById('siswa-jurnal').value = jurnal.siswa.id;
-            document.getElementById('tanggal-jurnal').value = jurnal.tanggal;
-            document.getElementById('kategori-jurnal').value = jurnal.kategori;
-            document.getElementById('kegiatan-jurnal').value = jurnal.kegiatan;
-            document.getElementById('evaluasi-tindak-lanjut-jurnal').value = jurnal.evaluasiTindakLanjut;
-            document.getElementById('status-jurnal').value = jurnal.status;
-            document.getElementById('refleksi-jurnal').value = jurnal.refleksi;
-            
-            // Update modal title
-            document.getElementById('tambahJurnalModalLabel').textContent = 'Edit Catatan Jurnal';
-            
-            // Show modal
-            const modal = new bootstrap.Modal(document.getElementById('tambahJurnalModal'));
-            modal.show();
+        async function openEditJurnalModal(id) {
+            try {
+                // Find journal data
+                const { data: jurnal, error } = await supabase
+                    .from('journals')
+                    .select(`
+                        *,
+                        students (id, nama, kelas)
+                    `)
+                    .eq('id', id)
+                    .single();
+                
+                if (error || !jurnal) {
+                    console.error('Error loading journal:', error);
+                    return;
+                }
+                
+                // Fill form with journal data
+                document.getElementById('jurnal-id').value = jurnal.id;
+                document.getElementById('siswa-jurnal').value = jurnal.siswa_id;
+                document.getElementById('tanggal-jurnal').value = jurnal.tanggal;
+                document.getElementById('kategori-jurnal').value = jurnal.kategori;
+                document.getElementById('kegiatan-jurnal').value = jurnal.kegiatan;
+                document.getElementById('evaluasi-tindak-lanjut-jurnal').value = jurnal.evaluasi_tindak_lanjut;
+                document.getElementById('status-jurnal').value = jurnal.status;
+                document.getElementById('refleksi-jurnal').value = jurnal.refleksi;
+                
+                // Update modal title
+                document.getElementById('tambahJurnalModalLabel').textContent = 'Edit Catatan Jurnal';
+                
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('tambahJurnalModal'));
+                modal.show();
+            } catch (error) {
+                console.error('Error in openEditJurnalModal:', error);
+            }
         }
         
-        function saveJurnal() {
+        async function saveJurnal() {
             const jurnalId = document.getElementById('jurnal-id').value;
             const siswaId = document.getElementById('siswa-jurnal').value;
             const tanggal = document.getElementById('tanggal-jurnal').value;
@@ -2182,255 +2447,94 @@
             const refleksi = document.getElementById('refleksi-jurnal').value;
             
             if (siswaId && tanggal && kategori && kegiatan && evaluasiTindakLanjut && status && refleksi) {
-                // Find selected student
-                const selectedSiswa = dataSiswa.find(siswa => siswa.id == siswaId);
-                
-                const jurnalData = {
-                    guruId: currentGuru.id,
-                    guru: currentGuru.nama,
-                    siswa: {
-                        id: selectedSiswa.id,
-                        nama: selectedSiswa.nama,
-                        kelas: selectedSiswa.kelas
-                    },
-                    tanggal: tanggal,
-                    kategori: kategori,
-                    kegiatan: kegiatan,
-                    evaluasiTindakLanjut: evaluasiTindakLanjut,
-                    status: status,
-                    refleksi: refleksi
-                };
-                
-                if (jurnalId) {
-                    // Edit existing journal
-                    const index = dataJurnal.findIndex(j => j.id == jurnalId);
-                    if (index !== -1) {
-                        dataJurnal[index] = { ...dataJurnal[index], ...jurnalData };
-                        alert('Catatan jurnal berhasil diperbarui!');
-                    }
-                } else {
-                    // Add new journal
-                    const newJurnal = {
-                        id: Date.now(),
-                        ...jurnalData
+                try {
+                    const jurnalData = {
+                        guru_id: currentGuru.id,
+                        siswa_id: siswaId,
+                        tanggal: tanggal,
+                        kategori: parseInt(kategori),
+                        kegiatan: kegiatan,
+                        evaluasi_tindak_lanjut: evaluasiTindakLanjut,
+                        status: parseInt(status),
+                        refleksi: refleksi
                     };
-                    dataJurnal.push(newJurnal);
-                    alert('Catatan jurnal berhasil ditambahkan!');
+                    
+                    let result;
+                    
+                    if (jurnalId) {
+                        // Update existing journal
+                        result = await supabase
+                            .from('journals')
+                            .update(jurnalData)
+                            .eq('id', jurnalId)
+                            .select();
+                        
+                        if (result.error) {
+                            console.error('Error updating journal:', result.error);
+                            alert('Gagal memperbarui catatan jurnal: ' + result.error.message);
+                            return;
+                        }
+                        
+                        alert('Catatan jurnal berhasil diperbarui!');
+                    } else {
+                        // Add new journal
+                        result = await supabase
+                            .from('journals')
+                            .insert(jurnalData)
+                            .select();
+                        
+                        if (result.error) {
+                            console.error('Error saving journal:', result.error);
+                            alert('Gagal menyimpan catatan jurnal: ' + result.error.message);
+                            return;
+                        }
+                        
+                        alert('Catatan jurnal berhasil ditambahkan!');
+                    }
+                    
+                    renderJurnal();
+                    
+                    // Reset form and close modal
+                    document.getElementById('jurnal-form').reset();
+                    document.getElementById('tanggal-jurnal').valueAsDate = new Date();
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('tambahJurnalModal'));
+                    modal.hide();
+                } catch (error) {
+                    console.error('Error in saveJurnal:', error);
+                    alert('Terjadi kesalahan saat menyimpan catatan jurnal.');
                 }
-                
-                localStorage.setItem('dataJurnal', JSON.stringify(dataJurnal));
-                
-                renderJurnal();
-                
-                // Reset form and close modal
-                document.getElementById('jurnal-form').reset();
-                document.getElementById('tanggal-jurnal').valueAsDate = new Date();
-                const modal = bootstrap.Modal.getInstance(document.getElementById('tambahJurnalModal'));
-                modal.hide();
             }
         }
         
-        function renderJurnal() {
+        async function renderJurnal() {
             const jurnalContainer = document.getElementById('daftar-jurnal');
             
-            // Get teacher's journals only
-            const guruJurnal = dataJurnal.filter(jurnal => jurnal.guruId === currentGuru.id);
-            
-            if (guruJurnal.length === 0) {
-                jurnalContainer.innerHTML = '<div class="alert alert-info">Belum ada catatan jurnal. Silakan tambahkan catatan baru.</div>';
-                return;
-            }
-            
-            // Sort journals by date (newest first)
-            const sortedJurnal = [...guruJurnal].sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-            
-            let html = '';
-            sortedJurnal.forEach(jurnal => {
-                const kategoriText = {
-                    '1': 'Pendampingan Akademik',
-                    '2': 'Pengembangan Kompetensi dan Keterampilan',
-                    '3': 'Pembentukan Karakter'
-                };
+            try {
+                // Get teacher's journals with student data
+                const { data, error } = await supabase
+                    .from('journals')
+                    .select(`
+                        *,
+                        students (id, nama, kelas)
+                    `)
+                    .eq('guru_id', currentGuru.id);
                 
-                const statusText = {
-                    '1': 'Baik - Kondisi Positif',
-                    '2': 'Perlu Perhatian - Butuh Monitoring',
-                    '3': 'Butuh Bantuan - Perlu Intervensi'
-                };
-                
-                const tanggalFormatted = new Date(jurnal.tanggal).toLocaleDateString('id-ID', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-                
-                html += `
-                    <div class="journal-entry">
-                        <div class="journal-date">${tanggalFormatted}</div>
-                        <div class="mb-2">
-                            <span class="journal-category category-${jurnal.kategori}">${kategoriText[jurnal.kategori]}</span>
-                            <span class="status-badge status-${jurnal.status}">${statusText[jurnal.status]}</span>
-                        </div>
-                        <div class="journal-info">
-                            <div class="journal-info-item">
-                                <i class="bi bi-person"></i>
-                                <strong>Siswa:</strong> ${jurnal.siswa.nama} (${jurnal.siswa.kelas})
-                            </div>
-                        </div>
-                        <h6>Kegiatan yang Dilakukan:</h6>
-                        <p>${jurnal.kegiatan}</p>
-                        <h6>Evaluasi dan Tindak Lanjut:</h6>
-                        <p>${jurnal.evaluasiTindakLanjut}</p>
-                        <h6>Refleksi:</h6>
-                        <p>${jurnal.refleksi}</p>
-                        <div class="mt-2">
-                            <button class="btn btn-sm btn-warning" onclick="openEditJurnalModal(${jurnal.id})">
-                                <i class="bi bi-pencil"></i> Edit
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteJurnal(${jurnal.id})">
-                                <i class="bi bi-trash"></i> Hapus
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            jurnalContainer.innerHTML = html;
-        }
-        
-        function deleteJurnal(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus catatan jurnal ini?')) {
-                dataJurnal = dataJurnal.filter(jurnal => jurnal.id !== id);
-                localStorage.setItem('dataJurnal', JSON.stringify(dataJurnal));
-                renderJurnal();
-                alert('Catatan jurnal berhasil dihapus!');
-            }
-        }
-        
-        function renderAnalisis() {
-            const ringkasanContainer = document.getElementById('ringkasan-analisis');
-            const analisisContainer = document.getElementById('daftar-analisis');
-            
-            // Get teacher's journals only
-            const guruJurnal = dataJurnal.filter(jurnal => jurnal.guruId === currentGuru.id);
-            
-            if (guruJurnal.length === 0) {
-                ringkasanContainer.innerHTML = '<div class="alert alert-info">Belum ada data analisis. Silakan tambahkan catatan jurnal terlebih dahulu.</div>';
-                analisisContainer.innerHTML = '<div class="alert alert-info">Belum ada data analisis. Silakan tambahkan catatan jurnal terlebih dahulu.</div>';
-                return;
-            }
-            
-            // Group journals by student
-            const jurnalBySiswa = {};
-            guruJurnal.forEach(jurnal => {
-                const siswaKey = `${jurnal.siswa.nama} (${jurnal.siswa.kelas})`;
-                if (!jurnalBySiswa[siswaKey]) {
-                    jurnalBySiswa[siswaKey] = [];
+                if (error) {
+                    console.error('Error loading journals:', error);
+                    jurnalContainer.innerHTML = '<div class="alert alert-danger">Gagal memuat data jurnal</div>';
+                    return;
                 }
-                jurnalBySiswa[siswaKey].push(jurnal);
-            });
-            
-            // Calculate summary
-            const statusSummary = {
-                '1': 0,
-                '2': 0,
-                '3': 0
-            };
-            
-            const kategoriSummary = {
-                '1': 0,
-                '2': 0,
-                '3': 0
-            };
-            
-            guruJurnal.forEach(jurnal => {
-                statusSummary[jurnal.status]++;
-                kategoriSummary[jurnal.kategori]++;
-            });
-            
-            // Render summary
-            let ringkasanHtml = `
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6>Ringkasan Status Bimbingan</h6>
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Status</th>
-                                    <th>Jumlah</th>
-                                    <th>Presentase</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="status-badge status-1">Baik - Kondisi Positif</span></td>
-                                    <td>${statusSummary['1']}</td>
-                                    <td>${guruJurnal.length > 0 ? Math.round((statusSummary['1'] / guruJurnal.length) * 100) : 0}%</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="status-badge status-2">Perlu Perhatian - Butuh Monitoring</span></td>
-                                    <td>${statusSummary['2']}</td>
-                                    <td>${guruJurnal.length > 0 ? Math.round((statusSummary['2'] / guruJurnal.length) * 100) : 0}%</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="status-badge status-3">Butuh Bantuan - Perlu Intervensi</span></td>
-                                    <td>${statusSummary['3']}</td>
-                                    <td>${guruJurnal.length > 0 ? Math.round((statusSummary['3'] / guruJurnal.length) * 100) : 0}%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <h6>Ringkasan Kategori Kegiatan</h6>
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Kategori</th>
-                                    <th>Jumlah</th>
-                                    <th>Presentase</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Pendampingan Akademik</td>
-                                    <td>${kategoriSummary['1']}</td>
-                                    <td>${guruJurnal.length > 0 ? Math.round((kategoriSummary['1'] / guruJurnal.length) * 100) : 0}%</td>
-                                </tr>
-                                <tr>
-                                    <td>Pengembangan Kompetensi dan Keterampilan</td>
-                                    <td>${kategoriSummary['2']}</td>
-                                    <td>${guruJurnal.length > 0 ? Math.round((kategoriSummary['2'] / guruJurnal.length) * 100) : 0}%</td>
-                                </tr>
-                                <tr>
-                                    <td>Pembentukan Karakter</td>
-                                    <td>${kategoriSummary['3']}</td>
-                                    <td>${guruJurnal.length > 0 ? Math.round((kategoriSummary['3'] / guruJurnal.length) * 100) : 0}%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
-            
-            ringkasanContainer.innerHTML = ringkasanHtml;
-            
-            // Render detailed analysis
-            let analisisHtml = '';
-            
-            Object.keys(jurnalBySiswa).forEach(siswaKey => {
-                const siswaJurnals = jurnalBySiswa[siswaKey];
-                const sortedJurnals = [...siswaJurnals].sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
                 
-                analisisHtml += `
-                    <div class="analysis-card">
-                        <div class="analysis-header">
-                            <div class="analysis-title">${siswaKey}</div>
-                            <div class="analysis-date">${siswaJurnals.length} catatan jurnal</div>
-                        </div>
-                `;
+                if (data.length === 0) {
+                    jurnalContainer.innerHTML = '<div class="alert alert-info">Belum ada catatan jurnal. Silakan tambahkan catatan baru.</div>';
+                    return;
+                }
                 
-                sortedJurnals.forEach(jurnal => {
+                // Sort journals by date (newest first)
+                const sortedJurnal = [...data].sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+                
+                let html = '';
+                sortedJurnal.forEach(jurnal => {
                     const kategoriText = {
                         '1': 'Pendampingan Akademik',
                         '2': 'Pengembangan Kompetensi dan Keterampilan',
@@ -2450,217 +2554,471 @@
                         day: 'numeric'
                     });
                     
-                    analisisHtml += `
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <div>
-                                    <span class="journal-category category-${jurnal.kategori}">${kategoriText[jurnal.kategori]}</span>
-                                    <span class="status-badge status-${jurnal.status}">${statusText[jurnal.status]}</span>
+                    html += `
+                        <div class="journal-entry">
+                            <div class="journal-date">${tanggalFormatted}</div>
+                            <div class="mb-2">
+                                <span class="journal-category category-${jurnal.kategori}">${kategoriText[jurnal.kategori]}</span>
+                                <span class="status-badge status-${jurnal.status}">${statusText[jurnal.status]}</span>
+                            </div>
+                            <div class="journal-info">
+                                <div class="journal-info-item">
+                                    <i class="bi bi-person"></i>
+                                    <strong>Siswa:</strong> ${jurnal.students.nama} (${jurnal.students.kelas})
                                 </div>
-                                <small class="text-muted">${tanggalFormatted}</small>
                             </div>
-                            <div class="mb-2">
-                                <strong>Kegiatan:</strong> ${jurnal.kegiatan}
-                            </div>
-                            <div class="mb-2">
-                                <strong>Evaluasi dan Tindak Lanjut:</strong> ${jurnal.evaluasiTindakLanjut}
-                            </div>
-                            <div>
-                                <strong>Refleksi:</strong> ${jurnal.refleksi}
+                            <h6>Kegiatan yang Dilakukan:</h6>
+                            <p>${jurnal.kegiatan}</p>
+                            <h6>Evaluasi dan Tindak Lanjut:</h6>
+                            <p>${jurnal.evaluasi_tindak_lanjut}</p>
+                            <h6>Refleksi:</h6>
+                            <p>${jurnal.refleksi}</p>
+                            <div class="mt-2">
+                                <button class="btn btn-sm btn-warning" onclick="openEditJurnalModal('${jurnal.id}')">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteJurnal('${jurnal.id}')">
+                                    <i class="bi bi-trash"></i> Hapus
+                                </button>
                             </div>
                         </div>
                     `;
                 });
                 
-                analisisHtml += `
+                jurnalContainer.innerHTML = html;
+            } catch (error) {
+                console.error('Error in renderJurnal:', error);
+                jurnalContainer.innerHTML = '<div class="alert alert-danger">Gagal memuat data jurnal</div>';
+            }
+        }
+        
+        async function deleteJurnal(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus catatan jurnal ini?')) {
+                try {
+                    const { error } = await supabase
+                        .from('journals')
+                        .delete()
+                        .eq('id', id);
+                    
+                    if (error) {
+                        console.error('Error deleting journal:', error);
+                        alert('Gagal menghapus catatan jurnal: ' + error.message);
+                        return;
+                    }
+                    
+                    renderJurnal();
+                    alert('Catatan jurnal berhasil dihapus!');
+                } catch (error) {
+                    console.error('Error in deleteJurnal:', error);
+                    alert('Terjadi kesalahan saat menghapus catatan jurnal.');
+                }
+            }
+        }
+        
+        async function renderAnalisis() {
+            const ringkasanContainer = document.getElementById('ringkasan-analisis');
+            const analisisContainer = document.getElementById('daftar-analisis');
+            
+            try {
+                // Get teacher's journals with student data
+                const { data, error } = await supabase
+                    .from('journals')
+                    .select(`
+                        *,
+                        students (id, nama, kelas)
+                    `)
+                    .eq('guru_id', currentGuru.id);
+                
+                if (error) {
+                    console.error('Error loading journals for analysis:', error);
+                    ringkasanContainer.innerHTML = '<div class="alert alert-danger">Gagal memuat data analisis</div>';
+                    analisisContainer.innerHTML = '<div class="alert alert-danger">Gagal memuat data analisis</div>';
+                    return;
+                }
+                
+                if (data.length === 0) {
+                    ringkasanContainer.innerHTML = '<div class="alert alert-info">Belum ada data analisis. Silakan tambahkan catatan jurnal terlebih dahulu.</div>';
+                    analisisContainer.innerHTML = '<div class="alert alert-info">Belum ada data analisis. Silakan tambahkan catatan jurnal terlebih dahulu.</div>';
+                    return;
+                }
+                
+                // Group journals by student
+                const jurnalBySiswa = {};
+                data.forEach(jurnal => {
+                    const siswaKey = `${jurnal.students.nama} (${jurnal.students.kelas})`;
+                    if (!jurnalBySiswa[siswaKey]) {
+                        jurnalBySiswa[siswaKey] = [];
+                    }
+                    jurnalBySiswa[siswaKey].push(jurnal);
+                });
+                
+                // Calculate summary
+                const statusSummary = {
+                    '1': 0,
+                    '2': 0,
+                    '3': 0
+                };
+                
+                const kategoriSummary = {
+                    '1': 0,
+                    '2': 0,
+                    '3': 0
+                };
+                
+                data.forEach(jurnal => {
+                    statusSummary[jurnal.status]++;
+                    kategoriSummary[jurnal.kategori]++;
+                });
+                
+                // Render summary
+                let ringkasanHtml = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Ringkasan Status Bimbingan</h6>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Jumlah</th>
+                                        <th>Presentase</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="status-badge status-1">Baik - Kondisi Positif</span></td>
+                                        <td>${statusSummary['1']}</td>
+                                        <td>${data.length > 0 ? Math.round((statusSummary['1'] / data.length) * 100) : 0}%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="status-badge status-2">Perlu Perhatian - Butuh Monitoring</span></td>
+                                        <td>${statusSummary['2']}</td>
+                                        <td>${data.length > 0 ? Math.round((statusSummary['2'] / data.length) * 100) : 0}%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="status-badge status-3">Butuh Bantuan - Perlu Intervensi</span></td>
+                                        <td>${statusSummary['3']}</td>
+                                        <td>${data.length > 0 ? Math.round((statusSummary['3'] / data.length) * 100) : 0}%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Ringkasan Kategori Kegiatan</h6>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Kategori</th>
+                                        <th>Jumlah</th>
+                                        <th>Presentase</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Pendampingan Akademik</td>
+                                        <td>${kategoriSummary['1']}</td>
+                                        <td>${data.length > 0 ? Math.round((kategoriSummary['1'] / data.length) * 100) : 0}%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pengembangan Kompetensi dan Keterampilan</td>
+                                        <td>${kategoriSummary['2']}</td>
+                                        <td>${data.length > 0 ? Math.round((kategoriSummary['2'] / data.length) * 100) : 0}%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pembentukan Karakter</td>
+                                        <td>${kategoriSummary['3']}</td>
+                                        <td>${data.length > 0 ? Math.round((kategoriSummary['3'] / data.length) * 100) : 0}%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 `;
-            });
-            
-            analisisContainer.innerHTML = analisisHtml;
+                
+                ringkasanContainer.innerHTML = ringkasanHtml;
+                
+                // Render detailed analysis
+                let analisisHtml = '';
+                
+                Object.keys(jurnalBySiswa).forEach(siswaKey => {
+                    const siswaJurnals = jurnalBySiswa[siswaKey];
+                    const sortedJurnals = [...siswaJurnals].sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+                    
+                    analisisHtml += `
+                        <div class="analysis-card">
+                            <div class="analysis-header">
+                                <div class="analysis-title">${siswaKey}</div>
+                                <div class="analysis-date">${siswaJurnals.length} catatan jurnal</div>
+                            </div>
+                    `;
+                    
+                    sortedJurnals.forEach(jurnal => {
+                        const kategoriText = {
+                            '1': 'Pendampingan Akademik',
+                            '2': 'Pengembangan Kompetensi dan Keterampilan',
+                            '3': 'Pembentukan Karakter'
+                        };
+                        
+                        const statusText = {
+                            '1': 'Baik - Kondisi Positif',
+                            '2': 'Perlu Perhatian - Butuh Monitoring',
+                            '3': 'Butuh Bantuan - Perlu Intervensi'
+                        };
+                        
+                        const tanggalFormatted = new Date(jurnal.tanggal).toLocaleDateString('id-ID', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        
+                        analisisHtml += `
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div>
+                                        <span class="journal-category category-${jurnal.kategori}">${kategoriText[jurnal.kategori]}</span>
+                                        <span class="status-badge status-${jurnal.status}">${statusText[jurnal.status]}</span>
+                                    </div>
+                                    <small class="text-muted">${tanggalFormatted}</small>
+                                </div>
+                                <div class="mb-2">
+                                    <strong>Kegiatan:</strong> ${jurnal.kegiatan}
+                                </div>
+                                <div class="mb-2">
+                                    <strong>Evaluasi dan Tindak Lanjut:</strong> ${jurnal.evaluasi_tindak_lanjut}
+                                </div>
+                                <div>
+                                    <strong>Refleksi:</strong> ${jurnal.refleksi}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    analisisHtml += `
+                        </div>
+                    `;
+                });
+                
+                analisisContainer.innerHTML = analisisHtml;
+            } catch (error) {
+                console.error('Error in renderAnalisis:', error);
+                ringkasanContainer.innerHTML = '<div class="alert alert-danger">Gagal memuat data analisis</div>';
+                analisisContainer.innerHTML = '<div class="alert alert-danger">Gagal memuat data analisis</div>';
+            }
         }
         
         // Open print modal
-        function openCetakModal() {
+        async function openCetakModal() {
             // Update siswa options
             const siswaSelect = document.getElementById('siswa-cetak');
             siswaSelect.innerHTML = '<option value="">Semua Siswa</option>';
             
-            // Get teacher's students only
-            const guruSiswa = dataSiswa.filter(siswa => siswa.guruId === currentGuru.id);
-            
-            guruSiswa.forEach(siswa => {
-                const option = document.createElement('option');
-                option.value = siswa.id;
-                option.textContent = `${siswa.nama} (${siswa.kelas})`;
-                siswaSelect.appendChild(option);
-            });
-            
-            // Show modal
-            const modal = new bootstrap.Modal(document.getElementById('cetakJurnalModal'));
-            modal.show();
+            try {
+                const { data, error } = await supabase
+                    .from('students')
+                    .select('*')
+                    .eq('guru_id', currentGuru.id);
+                
+                if (error) {
+                    console.error('Error loading students for print:', error);
+                    return;
+                }
+                
+                if (data) {
+                    data.forEach(siswa => {
+                        const option = document.createElement('option');
+                        option.value = siswa.id;
+                        option.textContent = `${siswa.nama} (${siswa.kelas})`;
+                        siswaSelect.appendChild(option);
+                    });
+                }
+                
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('cetakJurnalModal'));
+                modal.show();
+            } catch (error) {
+                console.error('Error in openCetakModal:', error);
+            }
         }
         
-        function prepareCetak() {
+        async function prepareCetak() {
             const siswaId = document.getElementById('siswa-cetak').value;
             const tanggalMulai = document.getElementById('tanggal-mulai-cetak').value;
             const tanggalSelesai = document.getElementById('tanggal-selesai-cetak').value;
             
-            // Filter journals by selected criteria and teacher
-            let filteredJurnal = dataJurnal.filter(jurnal => jurnal.guruId === currentGuru.id);
-            
-            // Filter by student if selected
-            if (siswaId) {
-                filteredJurnal = filteredJurnal.filter(jurnal => jurnal.siswa.id == siswaId);
-            }
-            
-            // Filter by date range if provided
-            if (tanggalMulai) {
-                filteredJurnal = filteredJurnal.filter(jurnal => new Date(jurnal.tanggal) >= new Date(tanggalMulai));
-            }
-            
-            if (tanggalSelesai) {
-                filteredJurnal = filteredJurnal.filter(jurnal => new Date(jurnal.tanggal) <= new Date(tanggalSelesai));
-            }
-            
-            // Sort filtered journals by date
-            const sortedJurnal = [...filteredJurnal].sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
-            
-            // Get student data for identity section
-            let studentData = null;
-            if (siswaId) {
-                studentData = dataSiswa.find(s => s.id == siswaId);
-            } else if (sortedJurnal.length > 0) {
-                // If no specific student selected, use the first student from journals
-                studentData = dataSiswa.find(s => s.id == sortedJurnal[0].siswa.id);
-            }
-            
-            // Render student identity section (simplified without box and title)
-            const studentIdentityContainer = document.getElementById('student-info-container');
-            if (studentData) {
-                studentIdentityContainer.innerHTML = `
-                    <div class="student-info-row">
-                        <div class="student-info-label">Nama</div>
-                        <div class="student-info-value">: ${studentData.nama}</div>
-                    </div>
-                    <div class="student-info-row">
-                        <div class="student-info-label">Kelas</div>
-                        <div class="student-info-value">: ${studentData.kelas}</div>
-                    </div>
-                    <div class="student-info-row">
-                        <div class="student-info-label">NIS</div>
-                        <div class="student-info-value">: ${studentData.nis}</div>
-                    </div>
-                    <div class="student-info-row">
-                        <div class="student-info-label">NISN</div>
-                        <div class="student-info-value">: ${studentData.nisn}</div>
-                    </div>
-                `;
-            } else {
-                studentIdentityContainer.innerHTML = '';
-            }
-            
-            // Render filtered journals
-            const cetakJurnalContainer = document.getElementById('cetak-daftar-jurnal');
-            
-            if (sortedJurnal.length === 0) {
-                cetakJurnalContainer.innerHTML = '<div class="alert alert-info">Tidak ada data jurnal untuk kriteria yang dipilih.</div>';
-            } else {
-                let html = '';
+            try {
+                // Build query
+                let query = supabase
+                    .from('journals')
+                    .select(`
+                        *,
+                        students (id, nama, kelas, nis, nisn)
+                    `)
+                    .eq('guru_id', currentGuru.id);
                 
-                // Create table for print view
-                html += `
-                    <table class="print-table">
-                        <thead>
+                // Filter by student if selected
+                if (siswaId) {
+                    query = query.eq('siswa_id', siswaId);
+                }
+                
+                // Filter by date range if provided
+                if (tanggalMulai) {
+                    query = query.gte('tanggal', tanggalMulai);
+                }
+                
+                if (tanggalSelesai) {
+                    query = query.lte('tanggal', tanggalSelesai);
+                }
+                
+                const { data, error } = await query;
+                
+                if (error) {
+                    console.error('Error loading journals for print:', error);
+                    document.getElementById('cetak-daftar-jurnal').innerHTML = '<div class="alert alert-danger">Gagal memuat data jurnal untuk dicetak</div>';
+                    return;
+                }
+                
+                // Sort filtered journals by date
+                const sortedJurnal = [...data].sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
+                
+                // Get student data for identity section
+                let studentData = null;
+                if (siswaId) {
+                    studentData = data.length > 0 ? data[0].students : null;
+                } else if (sortedJurnal.length > 0) {
+                    // If no specific student selected, use the first student from journals
+                    studentData = sortedJurnal[0].students;
+                }
+                
+                // Render student identity section (simplified without box and title)
+                const studentIdentityContainer = document.getElementById('student-info-container');
+                if (studentData) {
+                    studentIdentityContainer.innerHTML = `
+                        <div class="student-info-row">
+                            <div class="student-info-label">Nama</div>
+                            <div class="student-info-value">: ${studentData.nama}</div>
+                        </div>
+                        <div class="student-info-row">
+                            <div class="student-info-label">Kelas</div>
+                            <div class="student-info-value">: ${studentData.kelas}</div>
+                        </div>
+                        <div class="student-info-row">
+                            <div class="student-info-label">NIS</div>
+                            <div class="student-info-value">: ${studentData.nis}</div>
+                        </div>
+                        <div class="student-info-row">
+                            <div class="student-info-label">NISN</div>
+                            <div class="student-info-value">: ${studentData.nisn}</div>
+                        </div>
+                    `;
+                } else {
+                    studentIdentityContainer.innerHTML = '';
+                }
+                
+                // Render filtered journals
+                const cetakJurnalContainer = document.getElementById('cetak-daftar-jurnal');
+                
+                if (sortedJurnal.length === 0) {
+                    cetakJurnalContainer.innerHTML = '<div class="alert alert-info">Tidak ada data jurnal untuk kriteria yang dipilih.</div>';
+                } else {
+                    let html = '';
+                    
+                    // Create table for print view
+                    html += `
+                        <table class="print-table">
+                            <thead>
+                                <tr>
+                                    <th class="no">No</th>
+                                    <th class="tanggal">Tanggal</th>
+                                    <th>Kategori</th>
+                                    <th class="status">Status</th>
+                                    <th>Kegiatan</th>
+                                    <th>Evaluasi</th>
+                                    <th>Refleksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    
+                    sortedJurnal.forEach((jurnal, index) => {
+                        const kategoriText = {
+                            '1': 'Akademik',
+                            '2': 'Kompetensi',
+                            '3': 'Karakter'
+                        };
+                        
+                        const statusText = {
+                            '1': 'Baik',
+                            '2': 'Perhatian',
+                            '3': 'Bantuan'
+                        };
+                        
+                        const tanggalFormatted = new Date(jurnal.tanggal).toLocaleDateString('id-ID', {
+                            day: 'numeric',
+                            month: 'numeric',
+                            year: 'numeric'
+                        });
+                        
+                        // Truncate long text for better print layout
+                        const kegiatan = jurnal.kegiatan.length > 50 ? jurnal.kegiatan.substring(0, 50) + '...' : jurnal.kegiatan;
+                        const evaluasi = jurnal.evaluasi_tindak_lanjut.length > 50 ? jurnal.evaluasi_tindak_lanjut.substring(0, 50) + '...' : jurnal.evaluasi_tindak_lanjut;
+                        const refleksi = jurnal.refleksi.length > 50 ? jurnal.refleksi.substring(0, 50) + '...' : jurnal.refleksi;
+                        
+                        html += `
                             <tr>
-                                <th class="no">No</th>
-                                <th class="tanggal">Tanggal</th>
-                                <th>Kategori</th>
-                                <th class="status">Status</th>
-                                <th>Kegiatan</th>
-                                <th>Evaluasi</th>
-                                <th>Refleksi</th>
+                                <td class="no">${index + 1}</td>
+                                <td class="tanggal">${tanggalFormatted}</td>
+                                <td>${kategoriText[jurnal.kategori]}</td>
+                                <td class="status">${statusText[jurnal.status]}</td>
+                                <td>${kegiatan}</td>
+                                <td>${evaluasi}</td>
+                                <td>${refleksi}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                `;
-                
-                sortedJurnal.forEach((jurnal, index) => {
-                    const kategoriText = {
-                        '1': 'Akademik',
-                        '2': 'Kompetensi',
-                        '3': 'Karakter'
-                    };
-                    
-                    const statusText = {
-                        '1': 'Baik',
-                        '2': 'Perhatian',
-                        '3': 'Bantuan'
-                    };
-                    
-                    const tanggalFormatted = new Date(jurnal.tanggal).toLocaleDateString('id-ID', {
-                        day: 'numeric',
-                        month: 'numeric',
-                        year: 'numeric'
+                        `;
                     });
                     
-                    // Truncate long text for better print layout
-                    const kegiatan = jurnal.kegiatan.length > 50 ? jurnal.kegiatan.substring(0, 50) + '...' : jurnal.kegiatan;
-                    const evaluasi = jurnal.evaluasiTindakLanjut.length > 50 ? jurnal.evaluasiTindakLanjut.substring(0, 50) + '...' : jurnal.evaluasiTindakLanjut;
-                    const refleksi = jurnal.refleksi.length > 50 ? jurnal.refleksi.substring(0, 50) + '...' : jurnal.refleksi;
-                    
                     html += `
-                        <tr>
-                            <td class="no">${index + 1}</td>
-                            <td class="tanggal">${tanggalFormatted}</td>
-                            <td>${kategoriText[jurnal.kategori]}</td>
-                            <td class="status">${statusText[jurnal.status]}</td>
-                            <td>${kegiatan}</td>
-                            <td>${evaluasi}</td>
-                            <td>${refleksi}</td>
-                        </tr>
+                            </tbody>
+                        </table>
                     `;
-                });
-                
-                html += `
-                        </tbody>
-                    </table>
-                `;
-                
-                // Add signature section
-                html += `
-                    <div class="signature-section">
-                        <div class="signature-box">
-                            <p>Mengetahui,</p>
-                            <p class="jabatan">Kepala Sekolah</p>
-                            <div class="signature-line"></div>
-                            <p class="nama">${dataKepalaSekolah.nama || '_________________________'}</p>
-                            <p class="nip">NIP. ${dataKepalaSekolah.nip || ''}</p>
+                    
+                    // Add signature section
+                    html += `
+                        <div class="signature-section">
+                            <div class="signature-box">
+                                <p>Mengetahui,</p>
+                                <p class="jabatan">Kepala Sekolah</p>
+                                <div class="signature-line"></div>
+                                <p class="nama">${dataKepalaSekolah.nama || '_________________________'}</p>
+                                <p class="nip">NIP. ${dataKepalaSekolah.nip || ''}</p>
+                            </div>
+                            <div class="signature-box">
+                                <p>Medan, ${new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                                <p class="jabatan">Guru Wali</p>
+                                <div class="signature-line"></div>
+                                <p class="nama">${currentGuru.nama}</p>
+                                <p class="nip">NIP. ${currentGuru.nip || ''}</p>
+                            </div>
                         </div>
-                        <div class="signature-box">
-                            <p>Medan, ${new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                            <p class="jabatan">Guru Wali</p>
-                            <div class="signature-line"></div>
-                            <p class="nama">${currentGuru.nama}</p>
-                            <p class="nip">NIP. ${currentGuru.nip || ''}</p>
-                        </div>
-                    </div>
-                `;
+                    `;
+                    
+                    cetakJurnalContainer.innerHTML = html;
+                }
                 
-                cetakJurnalContainer.innerHTML = html;
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('cetakJurnalModal'));
+                modal.hide();
+                
+                // Show print page
+                showPrintPage();
+                
+                // Wait for page to render, then print
+                setTimeout(() => {
+                    window.print();
+                }, 500);
+            } catch (error) {
+                console.error('Error in prepareCetak:', error);
+                document.getElementById('cetak-daftar-jurnal').innerHTML = '<div class="alert alert-danger">Gagal mempersiapkan data untuk dicetak</div>';
             }
-            
-            // Close modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('cetakJurnalModal'));
-            modal.hide();
-            
-            // Show print page
-            showPrintPage();
-            
-            // Wait for page to render, then print
-            setTimeout(() => {
-                window.print();
-            }, 500);
         }
     </script>
 </body>
