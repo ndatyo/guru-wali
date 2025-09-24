@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplikasi Guru Wali</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@.10.0/font/bootstrap-icons.css">
     <style>
         body {
             background-color: #f8f9fa;
@@ -421,6 +421,59 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
+        /* Custom styles for import feature */
+        .import-instructions {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0d6efd;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .import-instructions h6 {
+            margin-top: 0;
+            color: #0d6efd;
+        }
+        
+        .import-instructions ul {
+            margin-bottom: 0;
+            padding-left: 20px;
+        }
+        
+        .import-preview {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        .import-preview table {
+            font-size: 14px;
+        }
+        
+        .import-status {
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        
+        .import-status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .import-status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .import-status.warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
     </style>
 </head>
 <body>
@@ -552,9 +605,14 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5>Data Guru</h5>
-                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#tambahGuruModal">
-                                    <i class="bi bi-plus-circle"></i> Tambah Guru
-                                </button>
+                                <div>
+                                    <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#importGuruModal">
+                                        <i class="bi bi-file-earmark-arrow-up"></i> Import Guru
+                                    </button>
+                                    <button class="btn btn-sm btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#tambahGuruModal">
+                                        <i class="bi bi-plus-circle"></i> Tambah Guru
+                                    </button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -741,9 +799,14 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5>Data Siswa</h5>
-                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#tambahSiswaModal">
-                                    <i class="bi bi-plus-circle"></i> Tambah Siswa
-                                </button>
+                                <div>
+                                    <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#importSiswaModal">
+                                        <i class="bi bi-file-earmark-arrow-up"></i> Import Siswa
+                                    </button>
+                                    <button class="btn btn-sm btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#tambahSiswaModal">
+                                        <i class="bi bi-plus-circle"></i> Tambah Siswa
+                                    </button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -909,6 +972,60 @@
         </div>
     </div>
     
+    <!-- Modal Import Guru -->
+    <div class="modal fade" id="importGuruModal" tabindex="-1" aria-labelledby="importGuruModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importGuruModalLabel">Import Data Guru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="import-instructions">
+                        <h6>Petunjuk Import Data Guru:</h6>
+                        <ul>
+                            <li>Format file harus berupa CSV (Comma Separated Values)</li>
+                            <li>File harus memiliki header: nama,nip,username,password</li>
+                            <li>Setiap baris mewakili satu data guru</li>
+                            <li>Password minimal 6 karakter</li>
+                            <li>Username harus unik</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="file-guru" class="form-label">Pilih File CSV</label>
+                        <input type="file" class="form-control" id="file-guru" accept=".csv" required>
+                    </div>
+                    
+                    <div id="guru-import-preview" class="import-preview hidden">
+                        <h6>Preview Data:</h6>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama</th>
+                                        <th>NIP</th>
+                                        <th>Username</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="guru-import-preview-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="guru-import-status" class="import-status hidden"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary" id="process-guru-import-btn" onclick="processGuruImport()" disabled>Proses Import</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Modal Tambah Siswa -->
     <div class="modal fade" id="tambahSiswaModal" tabindex="-1" aria-labelledby="tambahSiswaModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -960,6 +1077,63 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button type="button" class="btn btn-primary" onclick="saveSiswa()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Import Siswa -->
+    <div class="modal fade" id="importSiswaModal" tabindex="-1" aria-labelledby="importSiswaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importSiswaModalLabel">Import Data Siswa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="import-instructions">
+                        <h6>Petunjuk Import Data Siswa:</h6>
+                        <ul>
+                            <li>Format file harus berupa CSV (Comma Separated Values)</li>
+                            <li>File harus memiliki header: nama,kelas,nis,nisn,jenis_kelamin,agama</li>
+                            <li>Setiap baris mewakili satu data siswa</li>
+                            <li>Jenis kelamin: Laki-laki atau Perempuan</li>
+                            <li>Agama: Islam, Kristen, Katolik, Hindu, Buddha, atau Konghucu</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="file-siswa" class="form-label">Pilih File CSV</label>
+                        <input type="file" class="form-control" id="file-siswa" accept=".csv" required>
+                    </div>
+                    
+                    <div id="siswa-import-preview" class="import-preview hidden">
+                        <h6>Preview Data:</h6>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama</th>
+                                        <th>Kelas</th>
+                                        <th>NIS</th>
+                                        <th>NISN</th>
+                                        <th>Jenis Kelamin</th>
+                                        <th>Agama</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="siswa-import-preview-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="siswa-import-status" class="import-status hidden"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary" id="process-siswa-import-btn" onclick="processSiswaImport()" disabled>Proses Import</button>
                 </div>
             </div>
         </div>
@@ -1098,7 +1272,29 @@
                 document.getElementById('nip-kepala-sekolah').value = dataKepalaSekolah.nip;
                 document.getElementById('kepala-sekolah-terdaftar').textContent = `${dataKepalaSekolah.nama} (${dataKepalaSekolah.nip})`;
             }
+            
+            // Setup file input listeners for import features
+            setupImportListeners();
         });
+        
+        // Setup import file listeners
+        function setupImportListeners() {
+            // Guru import listener
+            document.getElementById('file-guru').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    previewGuruImport(file);
+                }
+            });
+            
+            // Siswa import listener
+            document.getElementById('file-siswa').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    previewSiswaImport(file);
+                }
+            });
+        }
         
         // Login functions
         document.getElementById('login-guru-form').addEventListener('submit', function(e) {
@@ -1393,6 +1589,216 @@
             }
         }
         
+        // Import Guru functions
+        function previewGuruImport(file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n');
+                
+                // Check if file has header
+                if (lines.length < 2) {
+                    showGuruImportStatus('error', 'File tidak valid atau tidak memiliki data');
+                    return;
+                }
+                
+                // Parse header
+                const header = lines[0].split(',').map(h => h.trim());
+                const expectedHeader = ['nama', 'nip', 'username', 'password'];
+                
+                // Check if header matches expected format
+                if (!expectedHeader.every(col => header.includes(col))) {
+                    showGuruImportStatus('error', 'Format header tidak valid. Header harus berisi: nama,nip,username,password');
+                    return;
+                }
+                
+                // Parse data rows
+                const previewData = [];
+                let hasError = false;
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue; // Skip empty lines
+                    
+                    const values = line.split(',').map(v => v.trim());
+                    
+                    if (values.length !== header.length) {
+                        hasError = true;
+                        previewData.push({
+                            row: i,
+                            nama: values[0] || '',
+                            nip: values[1] || '',
+                            username: values[2] || '',
+                            password: values[3] || '',
+                            status: 'Format tidak valid'
+                        });
+                        continue;
+                    }
+                    
+                    const rowData = {};
+                    header.forEach((col, index) => {
+                        rowData[col] = values[index];
+                    });
+                    
+                    // Validate data
+                    let status = 'Valid';
+                    let errorMsg = '';
+                    
+                    if (!rowData.nama) {
+                        status = 'Error';
+                        errorMsg = 'Nama tidak boleh kosong';
+                    } else if (!rowData.nip) {
+                        status = 'Error';
+                        errorMsg = 'NIP tidak boleh kosong';
+                    } else if (!rowData.username) {
+                        status = 'Error';
+                        errorMsg = 'Username tidak boleh kosong';
+                    } else if (!rowData.password || rowData.password.length < 6) {
+                        status = 'Error';
+                        errorMsg = 'Password minimal 6 karakter';
+                    } else if (dataGuru.some(g => g.username === rowData.username)) {
+                        status = 'Error';
+                        errorMsg = 'Username sudah digunakan';
+                    }
+                    
+                    if (status === 'Error') {
+                        hasError = true;
+                    }
+                    
+                    previewData.push({
+                        row: i,
+                        nama: rowData.nama,
+                        nip: rowData.nip,
+                        username: rowData.username,
+                        password: '••••••',
+                        status: status + (errorMsg ? ': ' + errorMsg : '')
+                    });
+                }
+                
+                // Display preview
+                displayGuruImportPreview(previewData);
+                
+                // Enable/disable import button based on errors
+                const importBtn = document.getElementById('process-guru-import-btn');
+                importBtn.disabled = hasError || previewData.length === 0;
+                
+                if (hasError) {
+                    showGuruImportStatus('warning', 'Terdapat data yang tidak valid. Perbaiki data tersebut sebelum melakukan import.');
+                } else if (previewData.length > 0) {
+                    showGuruImportStatus('success', `File valid. ${previewData.length} data guru siap diimport.`);
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+        
+        function displayGuruImportPreview(data) {
+            const previewContainer = document.getElementById('guru-import-preview');
+            const previewBody = document.getElementById('guru-import-preview-body');
+            
+            let html = '';
+            data.forEach(item => {
+                const statusClass = item.status.includes('Error') ? 'text-danger' : 
+                                   item.status.includes('Valid') ? 'text-success' : 'text-warning';
+                
+                html += `
+                    <tr>
+                        <td>${item.row}</td>
+                        <td>${item.nama}</td>
+                        <td>${item.nip}</td>
+                        <td>${item.username}</td>
+                        <td class="${statusClass}">${item.status}</td>
+                    </tr>
+                `;
+            });
+            
+            previewBody.innerHTML = html;
+            previewContainer.classList.remove('hidden');
+        }
+        
+        function showGuruImportStatus(type, message) {
+            const statusContainer = document.getElementById('guru-import-status');
+            statusContainer.className = 'import-status ' + type;
+            statusContainer.textContent = message;
+            statusContainer.classList.remove('hidden');
+        }
+        
+        function processGuruImport() {
+            const fileInput = document.getElementById('file-guru');
+            const file = fileInput.files[0];
+            
+            if (!file) return;
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n');
+                
+                // Parse header
+                const header = lines[0].split(',').map(h => h.trim());
+                
+                // Parse data rows
+                let successCount = 0;
+                let errorCount = 0;
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue; // Skip empty lines
+                    
+                    const values = line.split(',').map(v => v.trim());
+                    
+                    if (values.length !== header.length) {
+                        errorCount++;
+                        continue;
+                    }
+                    
+                    const rowData = {};
+                    header.forEach((col, index) => {
+                        rowData[col] = values[index];
+                    });
+                    
+                    // Validate data
+                    if (!rowData.nama || !rowData.nip || !rowData.username || 
+                        !rowData.password || rowData.password.length < 6 ||
+                        dataGuru.some(g => g.username === rowData.username)) {
+                        errorCount++;
+                        continue;
+                    }
+                    
+                    // Add to dataGuru
+                    const newGuru = {
+                        id: Date.now() + i, // Ensure unique ID
+                        nama: rowData.nama,
+                        nip: rowData.nip,
+                        username: rowData.username,
+                        password: rowData.password
+                    };
+                    
+                    dataGuru.push(newGuru);
+                    successCount++;
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('dataGuru', JSON.stringify(dataGuru));
+                
+                // Update UI
+                renderTabelGuru();
+                updateAdminDashboardStats();
+                
+                // Show result
+                showGuruImportStatus('success', `Import selesai. ${successCount} data berhasil diimport, ${errorCount} data gagal.`);
+                
+                // Reset form
+                fileInput.value = '';
+                document.getElementById('guru-import-preview').classList.add('hidden');
+                document.getElementById('process-guru-import-btn').disabled = true;
+            };
+            
+            reader.readAsText(file);
+        }
+        
         // Kepala sekolah functions
         document.getElementById('kepala-sekolah-form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -1513,6 +1919,233 @@
                 updateSiswaOptions();
                 alert('Data siswa berhasil dihapus!');
             }
+        }
+        
+        // Import Siswa functions
+        function previewSiswaImport(file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n');
+                
+                // Check if file has header
+                if (lines.length < 2) {
+                    showSiswaImportStatus('error', 'File tidak valid atau tidak memiliki data');
+                    return;
+                }
+                
+                // Parse header
+                const header = lines[0].split(',').map(h => h.trim());
+                const expectedHeader = ['nama', 'kelas', 'nis', 'nisn', 'jenis_kelamin', 'agama'];
+                
+                // Check if header matches expected format
+                if (!expectedHeader.every(col => header.includes(col))) {
+                    showSiswaImportStatus('error', 'Format header tidak valid. Header harus berisi: nama,kelas,nis,nisn,jenis_kelamin,agama');
+                    return;
+                }
+                
+                // Parse data rows
+                const previewData = [];
+                let hasError = false;
+                const validAgama = ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu'];
+                const validJenisKelamin = ['Laki-laki', 'Perempuan'];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue; // Skip empty lines
+                    
+                    const values = line.split(',').map(v => v.trim());
+                    
+                    if (values.length !== header.length) {
+                        hasError = true;
+                        previewData.push({
+                            row: i,
+                            nama: values[0] || '',
+                            kelas: values[1] || '',
+                            nis: values[2] || '',
+                            nisn: values[3] || '',
+                            jenis_kelamin: values[4] || '',
+                            agama: values[5] || '',
+                            status: 'Format tidak valid'
+                        });
+                        continue;
+                    }
+                    
+                    const rowData = {};
+                    header.forEach((col, index) => {
+                        rowData[col] = values[index];
+                    });
+                    
+                    // Validate data
+                    let status = 'Valid';
+                    let errorMsg = '';
+                    
+                    if (!rowData.nama) {
+                        status = 'Error';
+                        errorMsg = 'Nama tidak boleh kosong';
+                    } else if (!rowData.kelas) {
+                        status = 'Error';
+                        errorMsg = 'Kelas tidak boleh kosong';
+                    } else if (!rowData.nis) {
+                        status = 'Error';
+                        errorMsg = 'NIS tidak boleh kosong';
+                    } else if (!rowData.nisn) {
+                        status = 'Error';
+                        errorMsg = 'NISN tidak boleh kosong';
+                    } else if (!validJenisKelamin.includes(rowData.jenis_kelamin)) {
+                        status = 'Error';
+                        errorMsg = 'Jenis kelamin tidak valid (harus Laki-laki atau Perempuan)';
+                    } else if (!validAgama.includes(rowData.agama)) {
+                        status = 'Error';
+                        errorMsg = 'Agama tidak valid';
+                    }
+                    
+                    if (status === 'Error') {
+                        hasError = true;
+                    }
+                    
+                    previewData.push({
+                        row: i,
+                        nama: rowData.nama,
+                        kelas: rowData.kelas,
+                        nis: rowData.nis,
+                        nisn: rowData.nisn,
+                        jenis_kelamin: rowData.jenis_kelamin,
+                        agama: rowData.agama,
+                        status: status + (errorMsg ? ': ' + errorMsg : '')
+                    });
+                }
+                
+                // Display preview
+                displaySiswaImportPreview(previewData);
+                
+                // Enable/disable import button based on errors
+                const importBtn = document.getElementById('process-siswa-import-btn');
+                importBtn.disabled = hasError || previewData.length === 0;
+                
+                if (hasError) {
+                    showSiswaImportStatus('warning', 'Terdapat data yang tidak valid. Perbaiki data tersebut sebelum melakukan import.');
+                } else if (previewData.length > 0) {
+                    showSiswaImportStatus('success', `File valid. ${previewData.length} data siswa siap diimport.`);
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+        
+        function displaySiswaImportPreview(data) {
+            const previewContainer = document.getElementById('siswa-import-preview');
+            const previewBody = document.getElementById('siswa-import-preview-body');
+            
+            let html = '';
+            data.forEach(item => {
+                const statusClass = item.status.includes('Error') ? 'text-danger' : 
+                                   item.status.includes('Valid') ? 'text-success' : 'text-warning';
+                
+                html += `
+                    <tr>
+                        <td>${item.row}</td>
+                        <td>${item.nama}</td>
+                        <td>${item.kelas}</td>
+                        <td>${item.nis}</td>
+                        <td>${item.nisn}</td>
+                        <td>${item.jenis_kelamin}</td>
+                        <td>${item.agama}</td>
+                        <td class="${statusClass}">${item.status}</td>
+                    </tr>
+                `;
+            });
+            
+            previewBody.innerHTML = html;
+            previewContainer.classList.remove('hidden');
+        }
+        
+        function showSiswaImportStatus(type, message) {
+            const statusContainer = document.getElementById('siswa-import-status');
+            statusContainer.className = 'import-status ' + type;
+            statusContainer.textContent = message;
+            statusContainer.classList.remove('hidden');
+        }
+        
+        function processSiswaImport() {
+            const fileInput = document.getElementById('file-siswa');
+            const file = fileInput.files[0];
+            
+            if (!file) return;
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n');
+                
+                // Parse header
+                const header = lines[0].split(',').map(h => h.trim());
+                
+                // Parse data rows
+                let successCount = 0;
+                let errorCount = 0;
+                const validAgama = ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu'];
+                const validJenisKelamin = ['Laki-laki', 'Perempuan'];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue; // Skip empty lines
+                    
+                    const values = line.split(',').map(v => v.trim());
+                    
+                    if (values.length !== header.length) {
+                        errorCount++;
+                        continue;
+                    }
+                    
+                    const rowData = {};
+                    header.forEach((col, index) => {
+                        rowData[col] = values[index];
+                    });
+                    
+                    // Validate data
+                    if (!rowData.nama || !rowData.kelas || !rowData.nis || !rowData.nisn ||
+                        !validJenisKelamin.includes(rowData.jenis_kelamin) || 
+                        !validAgama.includes(rowData.agama)) {
+                        errorCount++;
+                        continue;
+                    }
+                    
+                    // Add to dataSiswa
+                    const newSiswa = {
+                        id: Date.now() + i, // Ensure unique ID
+                        guruId: currentGuru.id,
+                        nama: rowData.nama,
+                        kelas: rowData.kelas,
+                        nis: rowData.nis,
+                        nisn: rowData.nisn,
+                        jk: rowData.jenis_kelamin,
+                        agama: rowData.agama
+                    };
+                    
+                    dataSiswa.push(newSiswa);
+                    successCount++;
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
+                
+                // Update UI
+                renderTabelSiswa();
+                updateSiswaOptions();
+                
+                // Show result
+                showSiswaImportStatus('success', `Import selesai. ${successCount} data berhasil diimport, ${errorCount} data gagal.`);
+                
+                // Reset form
+                fileInput.value = '';
+                document.getElementById('siswa-import-preview').classList.add('hidden');
+                document.getElementById('process-siswa-import-btn').disabled = true;
+            };
+            
+            reader.readAsText(file);
         }
         
         function openEditJurnalModal(id) {
