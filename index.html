@@ -176,115 +176,267 @@
             color: #6c757d;
         }
         
-        /* Print Styles */
+        /* Print Styles - Professional PDF Layout */
         @media print {
             body {
                 background-color: white;
-                padding: 0;
+                font-family: 'Times New Roman', Times, serif;
+                font-size: 12pt;
+                line-height: 1.5;
+                color: #000;
                 margin: 0;
-                font-size: 12px;
+                padding: 0;
             }
-            .sidebar, .footer, .btn, .no-print {
+            
+            .sidebar, .footer, .btn, .no-print, .modal {
                 display: none !important;
             }
-            .col-md-9 {
+            
+            .container-fluid {
                 width: 100%;
                 max-width: 100%;
-                flex: 0 0 100%;
-                padding: 10px;
+                padding: 0;
+                margin: 0;
             }
+            
+            .row {
+                margin: 0;
+            }
+            
+            .col-md-9 {
+                width: 100%;
+                padding: 0;
+            }
+            
             .card {
                 box-shadow: none;
-                border: 1px solid #ddd;
+                border: none;
+                margin: 0;
                 page-break-inside: avoid;
-                margin-bottom: 10px;
             }
+            
             .card-header {
-                background-color: #0d6efd !important;
-                color: white !important;
-                padding: 8px;
+                display: none;
             }
+            
             .card-body {
-                padding: 10px;
+                padding: 0;
             }
-            .journal-entry {
-                border-left: 4px solid #0d6efd;
-                padding-left: 10px;
-                margin-bottom: 10px;
-                page-break-inside: avoid;
-            }
+            
+            /* Professional Header */
             .print-header {
                 text-align: center;
-                margin-bottom: 15px;
-                border-bottom: 2px solid #0d6efd;
-                padding-bottom: 5px;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid #000;
             }
+            
             .print-header h2 {
+                font-size: 16pt;
+                font-weight: bold;
                 margin: 0 0 5px 0;
-                color: #0d6efd;
-                font-size: 18px;
+                text-transform: uppercase;
             }
+            
             .print-header p {
+                font-size: 12pt;
                 margin: 0;
-                font-size: 14px;
+                font-weight: bold;
             }
+            
+            .print-header .sekolah {
+                font-size: 14pt;
+                margin-bottom: 5px;
+            }
+            
+            .print-header .alamat {
+                font-size: 10pt;
+                font-style: italic;
+                margin-bottom: 10px;
+            }
+            
+            /* Info Section */
             .print-info {
                 display: flex;
                 justify-content: space-between;
-                margin-bottom: 10px;
-                font-size: 11px;
+                margin-bottom: 20px;
+                font-size: 11pt;
+                border: 1px solid #000;
+                padding: 8px;
+                background-color: #f5f5f5;
             }
+            
+            .print-info div {
+                flex: 1;
+            }
+            
+            .print-info div:first-child {
+                border-right: 1px solid #000;
+                padding-right: 10px;
+            }
+            
+            .print-info div:last-child {
+                padding-left: 10px;
+            }
+            
+            /* Title Section */
+            .print-title {
+                text-align: center;
+                font-size: 14pt;
+                font-weight: bold;
+                margin-bottom: 15px;
+                text-decoration: underline;
+            }
+            
+            /* Table Styles */
             .print-table {
                 width: 100%;
                 border-collapse: collapse;
-                margin-bottom: 10px;
-                font-size: 10px;
+                margin-bottom: 20px;
+                font-size: 10pt;
             }
+            
             .print-table th, .print-table td {
-                border: 1px solid #ddd;
-                padding: 4px;
+                border: 1px solid #000;
+                padding: 6px 8px;
                 text-align: left;
                 vertical-align: top;
             }
+            
             .print-table th {
-                background-color: #f2f2f2;
+                background-color: #e0e0e0;
                 font-weight: bold;
+                text-align: center;
             }
+            
             .print-table td {
                 word-wrap: break-word;
-                max-width: 100px;
             }
+            
+            .print-table .no {
+                text-align: center;
+                width: 30px;
+            }
+            
+            .print-table .tanggal {
+                text-align: center;
+                width: 80px;
+            }
+            
+            .print-table .kategori, .print-table .status {
+                text-align: center;
+                width: 70px;
+            }
+            
+            /* Summary Section */
+            .print-summary {
+                margin-top: 20px;
+            }
+            
+            .print-summary h5 {
+                font-size: 12pt;
+                font-weight: bold;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+            
+            .summary-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+                font-size: 10pt;
+            }
+            
+            .summary-table th, .summary-table td {
+                border: 1px solid #000;
+                padding: 6px 8px;
+                text-align: left;
+            }
+            
+            .summary-table th {
+                background-color: #e0e0e0;
+                font-weight: bold;
+                text-align: center;
+            }
+            
+            .summary-table .jumlah {
+                text-align: center;
+                width: 80px;
+            }
+            
+            /* Signature Section */
+            .signature-section {
+                margin-top: 40px;
+                display: flex;
+                justify-content: space-between;
+            }
+            
+            .signature-box {
+                width: 45%;
+                text-align: center;
+            }
+            
+            .signature-box p {
+                margin: 5px 0;
+                font-size: 11pt;
+            }
+            
+            .signature-box .signature-line {
+                border-bottom: 1px solid #000;
+                height: 40px;
+                margin: 20px 0 5px 0;
+            }
+            
+            .signature-box .nama {
+                font-weight: bold;
+            }
+            
+            .signature-box .jabatan {
+                font-style: italic;
+            }
+            
+            .signature-box .nip {
+                font-size: 10pt;
+            }
+            
+            /* Footer */
             .print-footer {
                 position: fixed;
                 bottom: 0;
                 left: 0;
                 width: 100%;
                 text-align: center;
-                font-size: 10px;
-                color: #777;
-                border-top: 1px solid #ddd;
+                font-size: 9pt;
+                color: #666;
+                border-top: 1px solid #000;
                 padding-top: 5px;
+                background-color: white;
             }
-            .mt-4 {
+            
+            /* Page Break */
+            @page {
+                size: A4;
+                margin: 1cm;
+                margin-bottom: 2cm;
+            }
+            
+            /* Adjustments for better print layout */
+            .mt-3, .mt-4, .mt-5 {
                 margin-top: 15px !important;
             }
-            .mt-5 {
-                margin-top: 20px !important;
-            }
+            
             h5 {
-                font-size: 14px;
-                margin-bottom: 8px;
+                font-size: 12pt;
+                margin-bottom: 10px;
             }
+            
             p {
-                margin-bottom: 5px;
-                font-size: 11px;
+                margin-bottom: 8px;
+                font-size: 11pt;
             }
+            
             .row > div {
-                padding: 5px;
-            }
-            @page {
-                margin: 0.5cm;
-                size: A4;
+                padding: 0;
             }
         }
     </style>
@@ -703,36 +855,35 @@
     <div id="cetak-jurnal-page" class="page hidden">
         <div class="container-fluid">
             <div class="print-header">
+                <div class="sekolah">SMA NEGERI 20 MEDAN</div>
                 <h2>JURNAL KEGIATAN GURU WALI</h2>
-                <p>SMA NEGERI 20 MEDAN</p>
+                <div class="alamat">Jl. Guru Patimpus No. 20, Medan</div>
             </div>
             
             <div class="print-info">
                 <div>
-                    <strong>Guru Wali:</strong> <span id="print-guru"></span>
+                    <strong>Guru Wali:</strong><br>
+                    <span id="print-guru"></span>
                 </div>
                 <div>
-                    <strong>Periode:</strong> <span id="print-periode"></span>
+                    <strong>Periode:</strong><br>
+                    <span id="print-periode"></span>
                 </div>
                 <div>
-                    <strong>Tanggal Cetak:</strong> <span id="print-tanggal"></span>
+                    <strong>Tanggal Cetak:</strong><br>
+                    <span id="print-tanggal"></span>
                 </div>
             </div>
             
-            <div class="card">
-                <div class="card-header">
-                    <h5>Daftar Catatan Jurnal</h5>
-                </div>
-                <div class="card-body">
-                    <div id="cetak-daftar-jurnal">
-                        <div class="alert alert-info">
-                            Tidak ada data jurnal untuk periode yang dipilih.
-                        </div>
-                    </div>
+            <div class="print-title">DAFTAR CATATAN JURNAL</div>
+            
+            <div id="cetak-daftar-jurnal">
+                <div class="alert alert-info">
+                    Tidak ada data jurnal untuk periode yang dipilih.
                 </div>
             </div>
             
-            <div class="print-footer mt-5">
+            <div class="print-footer">
                 <p>© 2025 Aplikasi Guru Wali - SMA NEGERI 20 MEDAN</p>
             </div>
         </div>
@@ -1792,11 +1943,11 @@
                     <table class="print-table">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Tanggal</th>
+                                <th class="no">No</th>
+                                <th class="tanggal">Tanggal</th>
                                 <th>Siswa</th>
-                                <th>Kategori</th>
-                                <th>Status</th>
+                                <th class="kategori">Kategori</th>
+                                <th class="status">Status</th>
                                 <th>Kegiatan</th>
                                 <th>Evaluasi</th>
                                 <th>Refleksi</th>
@@ -1831,11 +1982,11 @@
                     
                     html += `
                         <tr>
-                            <td>${index + 1}</td>
-                            <td>${tanggalFormatted}</td>
-                            <td>${jurnal.siswa.nama}</td>
-                            <td>${kategoriText[jurnal.kategori]}</td>
-                            <td>${statusText[jurnal.status]}</td>
+                            <td class="no">${index + 1}</td>
+                            <td class="tanggal">${tanggalFormatted}</td>
+                            <td>${jurnal.siswa.nama}<br><small>${jurnal.siswa.kelas}</small></td>
+                            <td class="kategori">${kategoriText[jurnal.kategori]}</td>
+                            <td class="status">${statusText[jurnal.status]}</td>
                             <td>${kegiatan}</td>
                             <td>${evaluasi}</td>
                             <td>${refleksi}</td>
@@ -1867,50 +2018,62 @@
                 });
                 
                 html += `
-                    <div class="mt-3">
+                    <div class="print-summary">
                         <div class="row">
                             <div class="col-md-6">
-                                <h5>Ringkasan Kategori</h5>
-                                <table class="print-table">
+                                <h5>Ringkasan Kategori Kegiatan</h5>
+                                <table class="summary-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Kategori</th>
+                                            <th class="jumlah">Jumlah</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Akademik</td>
-                                            <td>${summary['1']}</td>
+                                            <td>Pendampingan Akademik</td>
+                                            <td class="jumlah">${summary['1']}</td>
                                         </tr>
                                         <tr>
-                                            <td>Kompetensi</td>
-                                            <td>${summary['2']}</td>
+                                            <td>Pengembangan Kompetensi</td>
+                                            <td class="jumlah">${summary['2']}</td>
                                         </tr>
                                         <tr>
-                                            <td>Karakter</td>
-                                            <td>${summary['3']}</td>
+                                            <td>Pembentukan Karakter</td>
+                                            <td class="jumlah">${summary['3']}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Total</strong></td>
-                                            <td><strong>${sortedJurnal.length}</strong></td>
+                                            <td class="jumlah"><strong>${sortedJurnal.length}</strong></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="col-md-6">
-                                <h5>Ringkasan Status</h5>
-                                <table class="print-table">
+                                <h5>Ringkasan Status Bimbingan</h5>
+                                <table class="summary-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th class="jumlah">Jumlah</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Baik</td>
-                                            <td>${statusSummary['1']}</td>
+                                            <td>Baik - Kondisi Positif</td>
+                                            <td class="jumlah">${statusSummary['1']}</td>
                                         </tr>
                                         <tr>
-                                            <td>Perhatian</td>
-                                            <td>${statusSummary['2']}</td>
+                                            <td>Perlu Perhatian</td>
+                                            <td class="jumlah">${statusSummary['2']}</td>
                                         </tr>
                                         <tr>
-                                            <td>Bantuan</td>
-                                            <td>${statusSummary['3']}</td>
+                                            <td>Butuh Bantuan</td>
+                                            <td class="jumlah">${statusSummary['3']}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Total</strong></td>
-                                            <td><strong>${sortedJurnal.length}</strong></td>
+                                            <td class="jumlah"><strong>${sortedJurnal.length}</strong></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -1921,20 +2084,20 @@
                 
                 // Add signature section
                 html += `
-                    <div class="mt-4 row">
-                        <div class="col-md-6">
+                    <div class="signature-section">
+                        <div class="signature-box">
                             <p>Mengetahui,</p>
-                            <p>Kepala Sekolah</p>
-                            <br><br><br>
-                            <p>${dataKepalaSekolah.nama || '_________________________'}</p>
-                            <p>NIP. ${dataKepalaSekolah.nip || ''}</p>
+                            <p class="jabatan">Kepala Sekolah</p>
+                            <div class="signature-line"></div>
+                            <p class="nama">${dataKepalaSekolah.nama || '_________________________'}</p>
+                            <p class="nip">NIP. ${dataKepalaSekolah.nip || ''}</p>
                         </div>
-                        <div class="col-md-6 text-end">
+                        <div class="signature-box">
                             <p>Medan, ${todayFormatted}</p>
-                            <p>Guru Wali</p>
-                            <br><br><br>
-                            <p>${currentGuru.nama}</p>
-                            <p>NIP.</p>
+                            <p class="jabatan">Guru Wali</p>
+                            <div class="signature-line"></div>
+                            <p class="nama">${currentGuru.nama}</p>
+                            <p class="nip">NIP.</p>
                         </div>
                     </div>
                 `;
