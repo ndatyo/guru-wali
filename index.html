@@ -182,6 +182,7 @@
                 background-color: white;
                 padding: 0;
                 margin: 0;
+                font-size: 12px;
             }
             .sidebar, .footer, .btn, .no-print {
                 display: none !important;
@@ -190,51 +191,68 @@
                 width: 100%;
                 max-width: 100%;
                 flex: 0 0 100%;
-                padding: 15px;
+                padding: 10px;
             }
             .card {
                 box-shadow: none;
                 border: 1px solid #ddd;
                 page-break-inside: avoid;
+                margin-bottom: 10px;
             }
             .card-header {
                 background-color: #0d6efd !important;
                 color: white !important;
+                padding: 8px;
+            }
+            .card-body {
+                padding: 10px;
             }
             .journal-entry {
                 border-left: 4px solid #0d6efd;
-                padding-left: 15px;
-                margin-bottom: 20px;
+                padding-left: 10px;
+                margin-bottom: 10px;
                 page-break-inside: avoid;
             }
             .print-header {
                 text-align: center;
-                margin-bottom: 30px;
+                margin-bottom: 15px;
                 border-bottom: 2px solid #0d6efd;
-                padding-bottom: 10px;
+                padding-bottom: 5px;
             }
             .print-header h2 {
-                margin-bottom: 5px;
+                margin: 0 0 5px 0;
                 color: #0d6efd;
+                font-size: 18px;
+            }
+            .print-header p {
+                margin: 0;
+                font-size: 14px;
             }
             .print-info {
                 display: flex;
                 justify-content: space-between;
-                margin-bottom: 20px;
-                font-size: 14px;
+                margin-bottom: 10px;
+                font-size: 11px;
             }
             .print-table {
                 width: 100%;
                 border-collapse: collapse;
-                margin-bottom: 20px;
+                margin-bottom: 10px;
+                font-size: 10px;
             }
             .print-table th, .print-table td {
                 border: 1px solid #ddd;
-                padding: 8px;
+                padding: 4px;
                 text-align: left;
+                vertical-align: top;
             }
             .print-table th {
                 background-color: #f2f2f2;
+                font-weight: bold;
+            }
+            .print-table td {
+                word-wrap: break-word;
+                max-width: 100px;
             }
             .print-footer {
                 position: fixed;
@@ -242,13 +260,31 @@
                 left: 0;
                 width: 100%;
                 text-align: center;
-                font-size: 12px;
+                font-size: 10px;
                 color: #777;
                 border-top: 1px solid #ddd;
-                padding-top: 10px;
+                padding-top: 5px;
+            }
+            .mt-4 {
+                margin-top: 15px !important;
+            }
+            .mt-5 {
+                margin-top: 20px !important;
+            }
+            h5 {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+            p {
+                margin-bottom: 5px;
+                font-size: 11px;
+            }
+            .row > div {
+                padding: 5px;
             }
             @page {
-                margin: 1cm;
+                margin: 0.5cm;
+                size: A4;
             }
         }
     </style>
@@ -542,6 +578,29 @@
                     <!-- Halaman Manajemen Kelas Guru -->
                     <div id="guru-manajemen-kelas-page" class="guru-page hidden">
                         <h2 class="mb-4">Manajemen Kelas</h2>
+                        
+                        <!-- Data Kepala Sekolah -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5>Data Kepala Sekolah</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="kepala-sekolah-form">
+                                    <div class="mb-3">
+                                        <label for="nama-kepala-sekolah" class="form-label">Nama Kepala Sekolah</label>
+                                        <input type="text" class="form-control" id="nama-kepala-sekolah" placeholder="Masukkan nama kepala sekolah">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="nip-kepala-sekolah" class="form-label">NIP</label>
+                                        <input type="text" class="form-control" id="nip-kepala-sekolah" placeholder="Masukkan NIP kepala sekolah">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                </form>
+                                <div class="mt-3">
+                                    <strong>Kepala Sekolah Terdaftar:</strong> <span id="kepala-sekolah-terdaftar">Belum ada data</span>
+                                </div>
+                            </div>
+                        </div>
                         
                         <!-- Data Siswa -->
                         <div class="card">
@@ -842,28 +901,24 @@
                 <div class="modal-body">
                     <form id="cetak-form">
                         <div class="mb-3">
-                            <label for="bulan-cetak" class="form-label">Bulan</label>
-                            <select class="form-select" id="bulan-cetak" required>
-                                <option value="">Pilih bulan</option>
-                                <option value="01">Januari</option>
-                                <option value="02">Februari</option>
-                                <option value="03">Maret</option>
-                                <option value="04">April</option>
-                                <option value="05">Mei</option>
-                                <option value="06">Juni</option>
-                                <option value="07">Juli</option>
-                                <option value="08">Agustus</option>
-                                <option value="09">September</option>
-                                <option value="10">Oktober</option>
-                                <option value="11">November</option>
-                                <option value="12">Desember</option>
+                            <label for="siswa-cetak" class="form-label">Siswa</label>
+                            <select class="form-select" id="siswa-cetak">
+                                <option value="">Semua Siswa</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="tahun-cetak" class="form-label">Tahun</label>
-                            <select class="form-select" id="tahun-cetak" required>
-                                <!-- Options will be populated by JavaScript -->
-                            </select>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="tanggal-mulai-cetak" class="form-label">Tanggal Mulai</label>
+                                    <input type="date" class="form-control" id="tanggal-mulai-cetak">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="tanggal-selesai-cetak" class="form-label">Tanggal Selesai</label>
+                                    <input type="date" class="form-control" id="tanggal-selesai-cetak">
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -881,34 +936,13 @@
         let dataGuru = JSON.parse(localStorage.getItem('dataGuru')) || [];
         let dataSiswa = JSON.parse(localStorage.getItem('dataSiswa')) || [];
         let dataJurnal = JSON.parse(localStorage.getItem('dataJurnal')) || [];
+        let dataKepalaSekolah = JSON.parse(localStorage.getItem('dataKepalaSekolah')) || { nama: '', nip: '' };
         let currentGuru = null;
         
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             // Set today's date as default
             document.getElementById('tanggal-jurnal').valueAsDate = new Date();
-            
-            // Populate year options
-            const currentYear = new Date().getFullYear();
-            const yearSelect = document.getElementById('tahun-cetak');
-            for (let year = currentYear - 2; year <= currentYear + 2; year++) {
-                const option = document.createElement('option');
-                option.value = year;
-                option.textContent = year;
-                if (year === currentYear) {
-                    option.selected = true;
-                }
-                yearSelect.appendChild(option);
-            }
-            
-            // Set current month as default
-            const currentMonth = new Date().getMonth() + 1;
-            const monthSelect = document.getElementById('bulan-cetak');
-            if (currentMonth < 10) {
-                monthSelect.value = '0' + currentMonth;
-            } else {
-                monthSelect.value = currentMonth.toString();
-            }
             
             // Check if user is already logged in
             const loggedInUser = sessionStorage.getItem('loggedInUser');
@@ -920,6 +954,13 @@
                     currentGuru = userData;
                     showGuruDashboard();
                 }
+            }
+            
+            // Load kepala sekolah data
+            if (dataKepalaSekolah.nama) {
+                document.getElementById('nama-kepala-sekolah').value = dataKepalaSekolah.nama;
+                document.getElementById('nip-kepala-sekolah').value = dataKepalaSekolah.nip;
+                document.getElementById('kepala-sekolah-terdaftar').textContent = `${dataKepalaSekolah.nama} (${dataKepalaSekolah.nip})`;
             }
         });
         
@@ -1078,6 +1119,7 @@
             } else if (pageId === 'jurnal') {
                 renderJurnal();
                 updateSiswaOptions();
+                updateSiswaOptionsCetak();
             } else if (pageId === 'analisis') {
                 renderAnalisis();
             }
@@ -1185,6 +1227,25 @@
             }
         }
         
+        // Kepala sekolah functions
+        document.getElementById('kepala-sekolah-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const namaKepalaSekolah = document.getElementById('nama-kepala-sekolah').value;
+            const nipKepalaSekolah = document.getElementById('nip-kepala-sekolah').value;
+            
+            if (namaKepalaSekolah && nipKepalaSekolah) {
+                dataKepalaSekolah = {
+                    nama: namaKepalaSekolah,
+                    nip: nipKepalaSekolah
+                };
+                
+                localStorage.setItem('dataKepalaSekolah', JSON.stringify(dataKepalaSekolah));
+                document.getElementById('kepala-sekolah-terdaftar').textContent = `${namaKepalaSekolah} (${nipKepalaSekolah})`;
+                
+                alert('Data kepala sekolah berhasil disimpan!');
+            }
+        });
+        
         // Guru functions
         function loadGuruData() {
             // Load teacher's students and journals
@@ -1192,6 +1253,7 @@
             renderJurnal();
             renderAnalisis();
             updateSiswaOptions();
+            updateSiswaOptionsCetak();
         }
         
         function saveSiswa() {
@@ -1219,6 +1281,7 @@
                 
                 renderTabelSiswa();
                 updateSiswaOptions();
+                updateSiswaOptionsCetak();
                 
                 // Reset form and close modal
                 document.getElementById('siswa-form').reset();
@@ -1232,6 +1295,21 @@
         function updateSiswaOptions() {
             const siswaSelect = document.getElementById('siswa-jurnal');
             siswaSelect.innerHTML = '<option value="">Pilih siswa</option>';
+            
+            // Get teacher's students only
+            const guruSiswa = dataSiswa.filter(siswa => siswa.guruId === currentGuru.id);
+            
+            guruSiswa.forEach(siswa => {
+                const option = document.createElement('option');
+                option.value = siswa.id;
+                option.textContent = `${siswa.nama} (${siswa.kelas})`;
+                siswaSelect.appendChild(option);
+            });
+        }
+        
+        function updateSiswaOptionsCetak() {
+            const siswaSelect = document.getElementById('siswa-cetak');
+            siswaSelect.innerHTML = '<option value="">Semua Siswa</option>';
             
             // Get teacher's students only
             const guruSiswa = dataSiswa.filter(siswa => siswa.guruId === currentGuru.id);
@@ -1284,6 +1362,7 @@
                 localStorage.setItem('dataSiswa', JSON.stringify(dataSiswa));
                 renderTabelSiswa();
                 updateSiswaOptions();
+                updateSiswaOptionsCetak();
                 alert('Data siswa berhasil dihapus!');
             }
         }
@@ -1621,21 +1700,26 @@
         }
         
         function prepareCetak() {
-            const bulan = document.getElementById('bulan-cetak').value;
-            const tahun = document.getElementById('tahun-cetak').value;
+            const siswaId = document.getElementById('siswa-cetak').value;
+            const tanggalMulai = document.getElementById('tanggal-mulai-cetak').value;
+            const tanggalSelesai = document.getElementById('tanggal-selesai-cetak').value;
             
-            if (!bulan || !tahun) {
-                alert('Silakan pilih bulan dan tahun terlebih dahulu!');
-                return;
+            // Filter journals by selected criteria and teacher
+            let filteredJurnal = dataJurnal.filter(jurnal => jurnal.guruId === currentGuru.id);
+            
+            // Filter by student if selected
+            if (siswaId) {
+                filteredJurnal = filteredJurnal.filter(jurnal => jurnal.siswa.id == siswaId);
             }
             
-            // Filter journals by selected month, year, and teacher
-            const filteredJurnal = dataJurnal.filter(jurnal => {
-                const jurnalDate = new Date(jurnal.tanggal);
-                const jurnalMonth = (jurnalDate.getMonth() + 1).toString().padStart(2, '0');
-                const jurnalYear = jurnalDate.getFullYear().toString();
-                return jurnalMonth === bulan && jurnalYear === tahun && jurnal.guruId === currentGuru.id;
-            });
+            // Filter by date range if provided
+            if (tanggalMulai) {
+                filteredJurnal = filteredJurnal.filter(jurnal => new Date(jurnal.tanggal) >= new Date(tanggalMulai));
+            }
+            
+            if (tanggalSelesai) {
+                filteredJurnal = filteredJurnal.filter(jurnal => new Date(jurnal.tanggal) <= new Date(tanggalSelesai));
+            }
             
             // Sort filtered journals by date
             const sortedJurnal = [...filteredJurnal].sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
@@ -1643,22 +1727,32 @@
             // Update print page header
             document.getElementById('print-guru').textContent = currentGuru.nama;
             
-            const monthNames = {
-                '01': 'Januari',
-                '02': 'Februari',
-                '03': 'Maret',
-                '04': 'April',
-                '05': 'Mei',
-                '06': 'Juni',
-                '07': 'Juli',
-                '08': 'Agustus',
-                '09': 'September',
-                '10': 'Oktober',
-                '11': 'November',
-                '12': 'Desember'
-            };
+            // Create period description
+            let periodeDesc = '';
+            if (siswaId) {
+                const selectedSiswa = dataSiswa.find(s => s.id == siswaId);
+                periodeDesc += `Siswa: ${selectedSiswa.nama} (${selectedSiswa.kelas})`;
+            }
             
-            document.getElementById('print-periode').textContent = `${monthNames[bulan]} ${tahun}`;
+            if (tanggalMulai || tanggalSelesai) {
+                if (periodeDesc) periodeDesc += ', ';
+                periodeDesc += 'Periode: ';
+                if (tanggalMulai) {
+                    periodeDesc += new Date(tanggalMulai).toLocaleDateString('id-ID');
+                }
+                periodeDesc += ' - ';
+                if (tanggalSelesai) {
+                    periodeDesc += new Date(tanggalSelesai).toLocaleDateString('id-ID');
+                } else {
+                    periodeDesc += 'Sekarang';
+                }
+            }
+            
+            if (!periodeDesc) {
+                periodeDesc = 'Semua Data';
+            }
+            
+            document.getElementById('print-periode').textContent = periodeDesc;
             
             const today = new Date();
             const todayFormatted = today.toLocaleDateString('id-ID', {
@@ -1673,7 +1767,7 @@
             const cetakJurnalContainer = document.getElementById('cetak-daftar-jurnal');
             
             if (sortedJurnal.length === 0) {
-                cetakJurnalContainer.innerHTML = '<div class="alert alert-info">Tidak ada data jurnal untuk periode yang dipilih.</div>';
+                cetakJurnalContainer.innerHTML = '<div class="alert alert-info">Tidak ada data jurnal untuk kriteria yang dipilih.</div>';
             } else {
                 let html = '';
                 
@@ -1686,9 +1780,9 @@
                                 <th>Tanggal</th>
                                 <th>Siswa</th>
                                 <th>Kategori</th>
-                                <th>Status Bimbingan</th>
+                                <th>Status</th>
                                 <th>Kegiatan</th>
-                                <th>Evaluasi dan Tindak Lanjut</th>
+                                <th>Evaluasi</th>
                                 <th>Refleksi</th>
                             </tr>
                         </thead>
@@ -1697,15 +1791,15 @@
                 
                 sortedJurnal.forEach((jurnal, index) => {
                     const kategoriText = {
-                        '1': 'Pendampingan Akademik',
-                        '2': 'Pengembangan Kompetensi dan Keterampilan',
-                        '3': 'Pembentukan Karakter'
+                        '1': 'Akademik',
+                        '2': 'Kompetensi',
+                        '3': 'Karakter'
                     };
                     
                     const statusText = {
-                        '1': 'Baik - Kondisi Positif',
-                        '2': 'Perlu Perhatian - Butuh Monitoring',
-                        '3': 'Butuh Bantuan - Perlu Intervensi'
+                        '1': 'Baik',
+                        '2': 'Perhatian',
+                        '3': 'Bantuan'
                     };
                     
                     const tanggalFormatted = new Date(jurnal.tanggal).toLocaleDateString('id-ID', {
@@ -1714,16 +1808,21 @@
                         year: 'numeric'
                     });
                     
+                    // Truncate long text for better print layout
+                    const kegiatan = jurnal.kegiatan.length > 50 ? jurnal.kegiatan.substring(0, 50) + '...' : jurnal.kegiatan;
+                    const evaluasi = jurnal.evaluasiTindakLanjut.length > 50 ? jurnal.evaluasiTindakLanjut.substring(0, 50) + '...' : jurnal.evaluasiTindakLanjut;
+                    const refleksi = jurnal.refleksi.length > 50 ? jurnal.refleksi.substring(0, 50) + '...' : jurnal.refleksi;
+                    
                     html += `
                         <tr>
                             <td>${index + 1}</td>
                             <td>${tanggalFormatted}</td>
-                            <td>${jurnal.siswa.nama}<br><small>${jurnal.siswa.kelas}</small></td>
+                            <td>${jurnal.siswa.nama}</td>
                             <td>${kategoriText[jurnal.kategori]}</td>
                             <td>${statusText[jurnal.status]}</td>
-                            <td>${jurnal.kegiatan}</td>
-                            <td>${jurnal.evaluasiTindakLanjut}</td>
-                            <td>${jurnal.refleksi}</td>
+                            <td>${kegiatan}</td>
+                            <td>${evaluasi}</td>
+                            <td>${refleksi}</td>
                         </tr>
                     `;
                 });
@@ -1752,81 +1851,72 @@
                 });
                 
                 html += `
-                    <div class="mt-4">
-                        <h5>Ringkasan Kegiatan</h5>
-                        <table class="print-table">
-                            <thead>
-                                <tr>
-                                    <th>Kategori</th>
-                                    <th>Jumlah Kegiatan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Pendampingan Akademik</td>
-                                    <td>${summary['1']}</td>
-                                </tr>
-                                <tr>
-                                    <td>Pengembangan Kompetensi dan Keterampilan</td>
-                                    <td>${summary['2']}</td>
-                                </tr>
-                                <tr>
-                                    <td>Pembentukan Karakter</td>
-                                    <td>${summary['3']}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Total</strong></td>
-                                    <td><strong>${sortedJurnal.length}</strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="mt-4">
-                        <h5>Ringkasan Status Bimbingan</h5>
-                        <table class="print-table">
-                            <thead>
-                                <tr>
-                                    <th>Status</th>
-                                    <th>Jumlah Siswa</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Baik - Kondisi Positif</td>
-                                    <td>${statusSummary['1']}</td>
-                                </tr>
-                                <tr>
-                                    <td>Perlu Perhatian - Butuh Monitoring</td>
-                                    <td>${statusSummary['2']}</td>
-                                </tr>
-                                <tr>
-                                    <td>Butuh Bantuan - Perlu Intervensi</td>
-                                    <td>${statusSummary['3']}</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Total</strong></td>
-                                    <td><strong>${sortedJurnal.length}</strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="mt-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Ringkasan Kategori</h5>
+                                <table class="print-table">
+                                    <tbody>
+                                        <tr>
+                                            <td>Akademik</td>
+                                            <td>${summary['1']}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Kompetensi</td>
+                                            <td>${summary['2']}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Karakter</td>
+                                            <td>${summary['3']}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Total</strong></td>
+                                            <td><strong>${sortedJurnal.length}</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Ringkasan Status</h5>
+                                <table class="print-table">
+                                    <tbody>
+                                        <tr>
+                                            <td>Baik</td>
+                                            <td>${statusSummary['1']}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Perhatian</td>
+                                            <td>${statusSummary['2']}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bantuan</td>
+                                            <td>${statusSummary['3']}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Total</strong></td>
+                                            <td><strong>${sortedJurnal.length}</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 `;
                 
                 // Add signature section
                 html += `
-                    <div class="mt-5 row">
+                    <div class="mt-4 row">
                         <div class="col-md-6">
                             <p>Mengetahui,</p>
                             <p>Kepala Sekolah</p>
-                            <br><br><br><br>
-                            <p>_________________________</p>
-                            <p>NIP.</p>
+                            <br><br><br>
+                            <p>${dataKepalaSekolah.nama || '_________________________'}</p>
+                            <p>NIP. ${dataKepalaSekolah.nip || ''}</p>
                         </div>
                         <div class="col-md-6 text-end">
                             <p>Medan, ${todayFormatted}</p>
                             <p>Guru Wali</p>
-                            <br><br><br><br>
+                            <br><br><br>
                             <p>${currentGuru.nama}</p>
                             <p>NIP.</p>
                         </div>
