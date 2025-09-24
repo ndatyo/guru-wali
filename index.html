@@ -255,28 +255,34 @@
                 margin-bottom: 10px;
             }
             
-            /* Info Section */
-            .print-info {
-                display: flex;
-                justify-content: space-between;
+            /* Student Identity Section */
+            .student-identity {
                 margin-bottom: 20px;
-                font-size: 11pt;
                 border: 1px solid #000;
-                padding: 8px;
+                padding: 10px;
                 background-color: #f5f5f5;
             }
             
-            .print-info div {
+            .student-identity h5 {
+                font-size: 12pt;
+                font-weight: bold;
+                margin: 0 0 10px 0;
+                text-align: center;
+                text-decoration: underline;
+            }
+            
+            .student-info-row {
+                display: flex;
+                margin-bottom: 5px;
+            }
+            
+            .student-info-label {
+                width: 120px;
+                font-weight: bold;
+            }
+            
+            .student-info-value {
                 flex: 1;
-            }
-            
-            .print-info div:first-child {
-                border-right: 1px solid #000;
-                padding-right: 10px;
-            }
-            
-            .print-info div:last-child {
-                padding-left: 10px;
             }
             
             /* Title Section */
@@ -326,42 +332,6 @@
             .print-table .kategori, .print-table .status {
                 text-align: center;
                 width: 70px;
-            }
-            
-            /* Summary Section */
-            .print-summary {
-                margin-top: 20px;
-            }
-            
-            .print-summary h5 {
-                font-size: 12pt;
-                font-weight: bold;
-                margin-bottom: 10px;
-                text-align: center;
-            }
-            
-            .summary-table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 20px;
-                font-size: 10pt;
-            }
-            
-            .summary-table th, .summary-table td {
-                border: 1px solid #000;
-                padding: 6px 8px;
-                text-align: left;
-            }
-            
-            .summary-table th {
-                background-color: #e0e0e0;
-                font-weight: bold;
-                text-align: center;
-            }
-            
-            .summary-table .jumlah {
-                text-align: center;
-                width: 80px;
             }
             
             /* Signature Section */
@@ -860,18 +830,11 @@
                 <div class="alamat">Jl. Guru Patimpus No. 20, Medan</div>
             </div>
             
-            <div class="print-info">
-                <div>
-                    <strong>Guru Wali:</strong><br>
-                    <span id="print-guru"></span>
-                </div>
-                <div>
-                    <strong>Periode:</strong><br>
-                    <span id="print-periode"></span>
-                </div>
-                <div>
-                    <strong>Tanggal Cetak:</strong><br>
-                    <span id="print-tanggal"></span>
+            <!-- Student Identity Section -->
+            <div id="student-identity-section" class="student-identity">
+                <h5>IDENTITAS SISWA</h5>
+                <div id="student-info-container">
+                    <!-- Student info will be populated here -->
                 </div>
             </div>
             
@@ -1891,44 +1854,47 @@
             // Sort filtered journals by date
             const sortedJurnal = [...filteredJurnal].sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
             
-            // Update print page header
-            document.getElementById('print-guru').textContent = currentGuru.nama;
-            
-            // Create period description
-            let periodeDesc = '';
+            // Get student data for identity section
+            let studentData = null;
             if (siswaId) {
-                const selectedSiswa = dataSiswa.find(s => s.id == siswaId);
-                periodeDesc += `Siswa: ${selectedSiswa.nama} (${selectedSiswa.kelas})`;
+                studentData = dataSiswa.find(s => s.id == siswaId);
+            } else if (sortedJurnal.length > 0) {
+                // If no specific student selected, use the first student from journals
+                studentData = dataSiswa.find(s => s.id == sortedJurnal[0].siswa.id);
             }
             
-            if (tanggalMulai || tanggalSelesai) {
-                if (periodeDesc) periodeDesc += ', ';
-                periodeDesc += 'Periode: ';
-                if (tanggalMulai) {
-                    periodeDesc += new Date(tanggalMulai).toLocaleDateString('id-ID');
-                }
-                periodeDesc += ' - ';
-                if (tanggalSelesai) {
-                    periodeDesc += new Date(tanggalSelesai).toLocaleDateString('id-ID');
-                } else {
-                    periodeDesc += 'Sekarang';
-                }
+            // Render student identity section
+            const studentIdentityContainer = document.getElementById('student-info-container');
+            if (studentData) {
+                studentIdentityContainer.innerHTML = `
+                    <div class="student-info-row">
+                        <div class="student-info-label">Nama Siswa</div>
+                        <div class="student-info-value">: ${studentData.nama}</div>
+                    </div>
+                    <div class="student-info-row">
+                        <div class="student-info-label">Kelas</div>
+                        <div class="student-info-value">: ${studentData.kelas}</div>
+                    </div>
+                    <div class="student-info-row">
+                        <div class="student-info-label">NIS</div>
+                        <div class="student-info-value">: ${studentData.nis}</div>
+                    </div>
+                    <div class="student-info-row">
+                        <div class="student-info-label">NISN</div>
+                        <div class="student-info-value">: ${studentData.nisn}</div>
+                    </div>
+                    <div class="student-info-row">
+                        <div class="student-info-label">Jenis Kelamin</div>
+                        <div class="student-info-value">: ${studentData.jk}</div>
+                    </div>
+                    <div class="student-info-row">
+                        <div class="student-info-label">Agama</div>
+                        <div class="student-info-value">: ${studentData.agama}</div>
+                    </div>
+                `;
+            } else {
+                studentIdentityContainer.innerHTML = '<p>Tidak ada data siswa</p>';
             }
-            
-            if (!periodeDesc) {
-                periodeDesc = 'Semua Data';
-            }
-            
-            document.getElementById('print-periode').textContent = periodeDesc;
-            
-            const today = new Date();
-            const todayFormatted = today.toLocaleDateString('id-ID', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-            document.getElementById('print-tanggal').textContent = todayFormatted;
             
             // Render filtered journals
             const cetakJurnalContainer = document.getElementById('cetak-daftar-jurnal');
@@ -1945,8 +1911,7 @@
                             <tr>
                                 <th class="no">No</th>
                                 <th class="tanggal">Tanggal</th>
-                                <th>Siswa</th>
-                                <th class="kategori">Kategori</th>
+                                <th>Kategori</th>
                                 <th class="status">Status</th>
                                 <th>Kegiatan</th>
                                 <th>Evaluasi</th>
@@ -1984,8 +1949,7 @@
                         <tr>
                             <td class="no">${index + 1}</td>
                             <td class="tanggal">${tanggalFormatted}</td>
-                            <td>${jurnal.siswa.nama}<br><small>${jurnal.siswa.kelas}</small></td>
-                            <td class="kategori">${kategoriText[jurnal.kategori]}</td>
+                            <td>${kategoriText[jurnal.kategori]}</td>
                             <td class="status">${statusText[jurnal.status]}</td>
                             <td>${kegiatan}</td>
                             <td>${evaluasi}</td>
@@ -1999,89 +1963,6 @@
                     </table>
                 `;
                 
-                // Add summary section
-                const summary = {
-                    '1': 0,
-                    '2': 0,
-                    '3': 0
-                };
-                
-                const statusSummary = {
-                    '1': 0,
-                    '2': 0,
-                    '3': 0
-                };
-                
-                sortedJurnal.forEach(jurnal => {
-                    summary[jurnal.kategori]++;
-                    statusSummary[jurnal.status]++;
-                });
-                
-                html += `
-                    <div class="print-summary">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5>Ringkasan Kategori Kegiatan</h5>
-                                <table class="summary-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Kategori</th>
-                                            <th class="jumlah">Jumlah</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Pendampingan Akademik</td>
-                                            <td class="jumlah">${summary['1']}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Pengembangan Kompetensi</td>
-                                            <td class="jumlah">${summary['2']}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Pembentukan Karakter</td>
-                                            <td class="jumlah">${summary['3']}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Total</strong></td>
-                                            <td class="jumlah"><strong>${sortedJurnal.length}</strong></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="col-md-6">
-                                <h5>Ringkasan Status Bimbingan</h5>
-                                <table class="summary-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Status</th>
-                                            <th class="jumlah">Jumlah</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Baik - Kondisi Positif</td>
-                                            <td class="jumlah">${statusSummary['1']}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Perlu Perhatian</td>
-                                            <td class="jumlah">${statusSummary['2']}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Butuh Bantuan</td>
-                                            <td class="jumlah">${statusSummary['3']}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Total</strong></td>
-                                            <td class="jumlah"><strong>${sortedJurnal.length}</strong></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
                 // Add signature section
                 html += `
                     <div class="signature-section">
@@ -2093,7 +1974,7 @@
                             <p class="nip">NIP. ${dataKepalaSekolah.nip || ''}</p>
                         </div>
                         <div class="signature-box">
-                            <p>Medan, ${todayFormatted}</p>
+                            <p>Medan, ${new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
                             <p class="jabatan">Guru Wali</p>
                             <div class="signature-line"></div>
                             <p class="nama">${currentGuru.nama}</p>
