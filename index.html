@@ -255,20 +255,9 @@
                 margin-bottom: 10px;
             }
             
-            /* Student Identity Section */
+            /* Student Identity Section - Simplified */
             .student-identity {
                 margin-bottom: 20px;
-                border: 1px solid #000;
-                padding: 10px;
-                background-color: #f5f5f5;
-            }
-            
-            .student-identity h5 {
-                font-size: 12pt;
-                font-weight: bold;
-                margin: 0 0 10px 0;
-                text-align: center;
-                text-decoration: underline;
             }
             
             .student-info-row {
@@ -830,9 +819,8 @@
                 <div class="alamat">Jl. Guru Patimpus No. 20, Medan</div>
             </div>
             
-            <!-- Student Identity Section -->
+            <!-- Student Identity Section - Simplified -->
             <div id="student-identity-section" class="student-identity">
-                <h5>IDENTITAS SISWA</h5>
                 <div id="student-info-container">
                     <!-- Student info will be populated here -->
                 </div>
@@ -1863,12 +1851,12 @@
                 studentData = dataSiswa.find(s => s.id == sortedJurnal[0].siswa.id);
             }
             
-            // Render student identity section
+            // Render student identity section (simplified without box and title)
             const studentIdentityContainer = document.getElementById('student-info-container');
             if (studentData) {
                 studentIdentityContainer.innerHTML = `
                     <div class="student-info-row">
-                        <div class="student-info-label">Nama Siswa</div>
+                        <div class="student-info-label">Nama</div>
                         <div class="student-info-value">: ${studentData.nama}</div>
                     </div>
                     <div class="student-info-row">
@@ -1883,17 +1871,9 @@
                         <div class="student-info-label">NISN</div>
                         <div class="student-info-value">: ${studentData.nisn}</div>
                     </div>
-                    <div class="student-info-row">
-                        <div class="student-info-label">Jenis Kelamin</div>
-                        <div class="student-info-value">: ${studentData.jk}</div>
-                    </div>
-                    <div class="student-info-row">
-                        <div class="student-info-label">Agama</div>
-                        <div class="student-info-value">: ${studentData.agama}</div>
-                    </div>
                 `;
             } else {
-                studentIdentityContainer.innerHTML = '<p>Tidak ada data siswa</p>';
+                studentIdentityContainer.innerHTML = '';
             }
             
             // Render filtered journals
