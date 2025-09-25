@@ -981,6 +981,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="guru-form">
+                        <input type="hidden" id="guru-id">
                         <div class="mb-3">
                             <label for="nama-guru-baru" class="form-label">Nama Guru</label>
                             <input type="text" class="form-control" id="nama-guru-baru" required>
@@ -1310,6 +1311,9 @@
             
             // Setup file input listeners for import features
             setupImportListeners();
+            
+            // Setup modal reset listeners
+            setupModalResetListeners();
         });
         
         // Setup import file listeners
@@ -1328,6 +1332,17 @@
                 if (file) {
                     previewSiswaImport(file);
                 }
+            });
+        }
+        
+        // Setup modal reset listeners
+        function setupModalResetListeners() {
+            // Reset guru modal when closed
+            const guruModal = document.getElementById('tambahGuruModal');
+            guruModal.addEventListener('hidden.bs.modal', function () {
+                document.getElementById('guru-form').reset();
+                document.getElementById('guru-id').value = '';
+                document.getElementById('tambahGuruModalLabel').textContent = 'Tambah Data Guru';
             });
         }
         
@@ -1598,55 +1613,112 @@
             }
         }
         
+        // Fungsi untuk membuka modal edit guru
+        function openEditGuruModal(id, nama, nip, username) {
+            // Isi form dengan data guru yang akan diedit
+            document.getElementById('nama-guru-baru').value = nama;
+            document.getElementById('nip-guru-baru').value = nip;
+            document.getElementById('username-guru-baru').value = username;
+            document.getElementById('password-guru-baru').value = ''; // Kosongkan password
+            document.getElementById('guru-id').value = id; // Simpan ID guru
+            
+            // Ubah judul modal
+            document.getElementById('tambahGuruModalLabel').textContent = 'Edit Data Guru';
+            
+            // Tampilkan modal
+            const modal = new bootstrap.Modal(document.getElementById('tambahGuruModal'));
+            modal.show();
+        }
+        
         async function saveGuru() {
+            const guruId = document.getElementById('guru-id').value;
             const namaGuru = document.getElementById('nama-guru-baru').value;
             const nipGuru = document.getElementById('nip-guru-baru').value;
             const usernameGuru = document.getElementById('username-guru-baru').value;
             const passwordGuru = document.getElementById('password-guru-baru').value;
             
-            if (namaGuru && nipGuru && usernameGuru && passwordGuru) {
+            if (namaGuru && nipGuru && usernameGuru) {
                 try {
-                    // Check if username already exists
-                    const { data: existingUser, error: checkError } = await supabase
-                        .from('users')
-                        .select('username')
-                        .eq('username', usernameGuru)
-                        .single();
+                    let result;
                     
-                    if (existingUser) {
-                        alert('Username sudah digunakan!');
-                        return;
-                    }
-                    
-                    // Insert new teacher
-                    const { data, error } = await supabase
-                        .from('users')
-                        .insert([
-                            {
-                                nama: namaGuru,
-                                nip: nipGuru,
-                                username: usernameGuru,
-                                password: passwordGuru,
-                                role: 'guru'
-                            }
-                        ])
-                        .select();
-                    
-                    if (error) {
-                        console.error('Error saving teacher:', error);
-                        alert('Gagal menyimpan data guru: ' + error.message);
-                        return;
+                    if (guruId) {
+                        // Mode edit - perbarui data guru yang ada
+                        const updateData = {
+                            nama: namaGuru,
+                            nip: nipGuru,
+                            username: usernameGuru
+                        };
+                        
+                        // Hanya perbarui password jika diisi
+                        if (passwordGuru) {
+                            updateData.password = passwordGuru;
+                        }
+                        
+                        result = await supabase
+                            .from('users')
+                            .update(updateData)
+                            .eq('id', guruId)
+                            .select();
+                        
+                        if (result.error) {
+                            console.error('Error updating teacher:', result.error);
+                            alert('Gagal memperbarui data guru: ' + result.error.message);
+                            return;
+                        }
+                        
+                        alert('Data guru berhasil diperbarui!');
+                    } else {
+                        // Mode tambah - buat guru baru
+                        if (!passwordGuru) {
+                            alert('Password harus diisi untuk guru baru!');
+                            return;
+                        }
+                        
+                        // Check if username already exists
+                        const { data: existingUser, error: checkError } = await supabase
+                            .from('users')
+                            .select('username')
+                            .eq('username', usernameGuru)
+                            .single();
+                        
+                        if (existingUser) {
+                            alert('Username sudah digunakan!');
+                            return;
+                        }
+                        
+                        // Insert new teacher
+                        result = await supabase
+                            .from('users')
+                            .insert([
+                                {
+                                    nama: namaGuru,
+                                    nip: nipGuru,
+                                    username: usernameGuru,
+                                    password: passwordGuru,
+                                    role: 'guru'
+                                }
+                            ])
+                            .select();
+                        
+                        if (result.error) {
+                            console.error('Error saving teacher:', result.error);
+                            alert('Gagal menyimpan data guru: ' + result.error.message);
+                            return;
+                        }
+                        
+                        alert('Data guru berhasil ditambahkan!');
                     }
                     
                     renderTabelGuru();
                     updateAdminDashboardStats();
                     
-                    // Reset form and close modal
+                    // Reset form dan modal
                     document.getElementById('guru-form').reset();
+                    document.getElementById('guru-id').value = '';
+                    document.getElementById('tambahGuruModalLabel').textContent = 'Tambah Data Guru';
                     const modal = bootstrap.Modal.getInstance(document.getElementById('tambahGuruModal'));
                     modal.hide();
                     
-                    alert('Data guru berhasil ditambahkan!');
                 } catch (error) {
                     console.error('Error in saveGuru:', error);
                     alert('Terjadi kesalahan saat menyimpan data guru.');
@@ -1683,9 +1755,14 @@
                             <td>${guru.nip}</td>
                             <td>${guru.username}</td>
                             <td>
-                                <button class="btn btn-sm btn-danger" onclick="deleteGuru('${guru.id}')">
-                                    <i class="bi bi-trash"></i>
-                                </button>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-sm btn-warning" onclick="openEditGuruModal('${guru.id}', '${guru.nama}', '${guru.nip}', '${guru.username}')">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteGuru('${guru.id}')">
+                                        <i class="bi bi-trash"></i> Hapus
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     `;
